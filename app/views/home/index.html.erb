@@ -1,0 +1,13 @@
+<div class="flex flex-col items-center justify-center h-full">
+  <h1 class="font-bold text-4xl mb-8">환영합니다!</h1>
+
+  <% if user_signed_in? %>
+    <p class="text-lg mb-4">안녕하세요, <%= current_user.email %>님!</p>
+    <%= link_to "채팅방으로 이동", chat_rooms_path, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-xl" %>
+    <%= link_to "로그아웃", destroy_user_session_path, data: { turbo_method: :delete }, class: "mt-4 text-blue-500 hover:underline" %>
+  <% else %>
+    <p class="text-lg mb-4">채팅 서비스를 이용하시려면 로그인 또는 회원가입을 해주세요.</p>
+    <%= link_to "로그인", new_user_session_path, class: "bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-xl mb-4" %>
+    <%= link_to "회원가입", new_user_registration_path, class: "bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-lg text-xl" %>
+  <% end %>
+</div>

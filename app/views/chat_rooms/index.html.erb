@@ -1,0 +1,15 @@
+<div class="flex flex-col">
+  <h1 class="font-bold text-2xl mb-4">채팅방 목록</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <% @chat_rooms.each do |chat_room| %>
+      <div class="border rounded-lg p-4 shadow-md">
+        <h2 class="font-semibold text-xl mb-2"><%= link_to chat_room.title, chat_room %></h2>
+        <p class="text-gray-600 mb-4"><%= chat_room.description %></p>
+        <%= link_to "채팅방 입장", chat_room, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to "새 채팅방 만들기", new_chat_room_path, class: "mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg self-start" %>
+</div>

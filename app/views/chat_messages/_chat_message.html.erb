@@ -1,0 +1,12 @@
+<div class="mb-2 p-2 rounded-lg <%= chat_message.user == current_user ? 'bg-blue-100 self-end' : 'bg-gray-100 self-start' %>">
+  <p class="text-sm font-semibold"><%= chat_message.user.email %></p>
+  <p class="text-base"><%= chat_message.content %></p>
+  <% if chat_message.file.attached? %>
+    <% if chat_message.file.image? %>
+      <%= image_tag chat_message.file, class: "max-w-xs mt-2" %>
+    <% else %>
+      <%= link_to chat_message.file.filename, rails_blob_path(chat_message.file, disposition: "attachment"), class: "text-blue-500 hover:underline mt-2 block" %>
+    <% end %>
+  <% end %>
+  <p class="text-xs text-gray-500 text-right"><%= chat_message.created_at.strftime("%H:%M") %></p>
+</div>

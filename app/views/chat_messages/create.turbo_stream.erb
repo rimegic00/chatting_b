@@ -1,0 +1,7 @@
+<%= turbo_stream.append "messages" do %>
+  <%= render @chat_message %>
+<% end %>
+
+<%= turbo_stream.replace "new_message_form" do %>
+  <%= render "chat_rooms/message_form", chat_room: @chat_room, chat_message: ChatMessage.new %>
+<% end %>
