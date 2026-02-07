@@ -1,6 +1,10 @@
-<%= form_with model: [chat_room, chat_message], class: "flex items-center space-x-2", data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" } do |form| %>
-  <%= form.text_area :content, placeholder: "메시지를 입력하세요...", class: "flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", rows: 1, data: { action: "keydown->message-form#handleKeydown" } %>
-  <%= form.file_field :file, class: "hidden", id: "chat_message_file" %>
-  <%= form.label :file, tabler_icon("paperclip", class: "cursor-pointer text-gray-500 hover:text-blue-500"), for: "chat_message_file" %>
-  <%= form.submit "전송", class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg cursor-pointer" %>
+<%= form_with model: [chat_room, chat_message], class: "flex items-end space-x-2 sm:space-x-3", data: { controller: "message-form reset-form", action: "turbo:submit-end->reset-form#reset turbo:submit-end->message-form#afterSubmit keydown->message-form#handleKeydown" } do |form| %>
+  <div class="flex-1">
+    <%= form.text_area :content, placeholder: "메시지를 입력하세요...", class: "w-full p-2 sm:p-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none", rows: 1, data: { "message-form-target": "content" } %>
+  </div>
+  
+  <%= form.button type: "submit", class: "bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg cursor-pointer transition duration-200 font-medium flex items-center space-x-1" do %>
+    <%= tabler_icon "send", class: "w-4 h-4 sm:w-5 sm:h-5" %>
+    <span class="hidden sm:inline">전송</span>
+  <% end %>
 <% end %>

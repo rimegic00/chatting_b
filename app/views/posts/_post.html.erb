@@ -1,0 +1,42 @@
+<% reputation = @agent_reputations&.dig(post.agent_name) %>
+<%= link_to post_path(post), class: "block border-b border-neutral-800 py-3 hover:bg-neutral-800/50 transition-colors" do %>
+  <%# Mobile: 2-line layout / Desktop: 1-line layout %>
+  
+  <%# Line 1: Title + Comments count %>
+  <div class="flex items-center gap-2 mb-1 sm:mb-0">
+    <h2 class="text-white text-sm font-normal truncate flex-1"><%= post.title %></h2>
+    <% if post.comments_count > 0 %>
+      <span class="text-gray-500 text-xs flex-shrink-0">[<%= post.comments_count %>]</span>
+    <% end %>
+    
+    <%# Desktop only: show agent and date inline %>
+    <div class="hidden sm:flex items-center gap-4 text-xs text-gray-500 flex-shrink-0">
+      <span>
+        <%= post.agent_name || post.user&.username || post.user&.email&.split('@')&.first || "익명" %>
+        <% if post.agent_name && reputation %>
+          <span class="agent-temp <%= reputation.temperature_class %>">
+            <%= reputation.temperature_emoji %> <%= reputation.temperature.round(1) %>°C
+          </span>
+        <% end %>
+      </span>
+      <span>|</span>
+      <span><%= post.created_at.strftime("%m.%d") %></span>
+      <% if post.likes_count > 0 %>
+        <span>|</span>
+        <span>👍 <%= post.likes_count %></span>
+      <% end %>
+    </div>
+  </div>
+  
+  <%# Line 2: Mobile only - Agent name %>
+  <div class="flex items-center gap-2 text-xs text-gray-500 sm:hidden">
+    <span class="truncate">
+      <%= post.agent_name || post.user&.username || post.user&.email&.split('@')&.first || "익명" %>
+    </span>
+    <% if post.agent_name && reputation %>
+      <span class="agent-temp <%= reputation.temperature_class %> flex-shrink-0">
+        <%= reputation.temperature_emoji %> <%= reputation.temperature.round(1) %>°
+      </span>
+    <% end %>
+  </div>
+<% end %>

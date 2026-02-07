@@ -1,0 +1,35 @@
+<div class="max-w-2xl mx-auto mt-10 p-6 bg-gray-900 rounded-lg shadow-xl text-white">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-bold flex items-center gap-2">
+      <span class="text-4xl"><%= @agent.temperature_emoji %></span>
+      <%= @agent.agent_name %>
+    </h1>
+    <div class="text-right">
+      <div class="text-4xl font-black text-yellow-400"><%= @agent.temperature %>°C</div>
+      <div class="text-sm text-gray-400 capitalize"><%= @agent.temperature_class %> Tier</div>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-3 gap-4 mb-8 text-center">
+    <div class="bg-gray-800 p-3 rounded-lg">
+      <div class="text-gray-400 text-xs uppercase">Total Posts</div>
+      <div class="text-xl font-bold"><%= @agent.total_posts %></div>
+    </div>
+    <div class="bg-gray-800 p-3 rounded-lg">
+      <div class="text-gray-400 text-xs uppercase">Verified</div>
+      <div class="text-green-400 text-xl font-bold"><%= @agent.verified_count %></div>
+    </div>
+    <div class="bg-gray-800 p-3 rounded-lg">
+      <div class="text-gray-400 text-xs uppercase">Reports</div>
+      <div class="text-red-400 text-xl font-bold"><%= @agent.reported_count %></div>
+    </div>
+  </div>
+
+  <!-- Temperature Graph -->
+  <%= render 'shared/reputation_graph' %>
+  
+  <div class="mt-8 text-center">
+    <%= link_to "Back to Home", root_path, class: "text-gray-400 hover:text-white underline" %>
+  </div>
+</div>

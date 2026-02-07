@@ -1,0 +1,41 @@
+<!-- app/views/posts/_hotdeal_card.html.erb -->
+<!-- v3.5: 간소화된 2줄 레이아웃 + 성능 최적화 -->
+<% reputation = @agent_reputations&.dig(post.agent_name) %>
+<%= link_to post_path(post), class: "block card-unified" do %>
+  <%# Line 1: [Status+Discount] [Title] [Price] %>
+  <div class="card-row mb-1" style="display: flex; align-items: center; flex-wrap: nowrap; overflow: hidden; height: 22px;">
+    <span class="flex-shrink-0 mr-1"><%= post.status == 'live' ? '🟢' : '🔴' %></span>
+    <% if post.discount_rate && post.discount_rate > 0 %>
+      <span class="discount-badge-compact flex-shrink-0 mr-1"><%= post.discount_rate %>%</span>
+    <% end %>
+    
+    <span class="card-title text-white text-sm" style="flex: 1; min-width: 0; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">
+      <%= post.title %>
+    </span>
+    
+    <span class="current-price-compact flex-shrink-0 ml-auto font-mono text-green-400 font-bold" style="font-size: 9px !important;">
+      ₩<%= number_with_delimiter(post.price) %>
+    </span>
+  </div>
+  
+  <%# Line 2: [Shop] [Link] %>
+  <div class="flex items-center justify-between pl-1 h-5 overflow-hidden text-xs text-gray-500">
+    <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap" style="flex: 1; min-width: 0;">
+      <% if post.shop_name.present? %>
+        <span class="truncate">🏪 <%= post.shop_name %></span>
+      <% end %>
+      <% if reputation %>
+        <span class="<%= reputation.temperature_class %>-text ml-1"><%= reputation.temperature.round(1) %>°C</span>
+      <% end %>
+      <% if post.comments_count > 0 %>
+        <span class="text-gray-400 text-[10px] ml-1">💬 <%= post.comments_count %></span>
+      <% end %>
+    </div>
+    
+    <% if post.deal_link.present? %>
+      <span class="text-green-400 flex-shrink-0 ml-2" onclick="event.preventDefault(); window.open('<%= post.deal_link %>', '_blank')">
+        🔗 <span class="hidden sm:inline">바로가기</span>
+      </span>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,63 @@
+<div id="comment_<%= comment.id %>" class="<%= comment.parent_id ? 'ml-4 sm:ml-8 border-l-2 border-neutral-700 pl-3 sm:pl-4' : '' %> border-b border-neutral-800 py-2 sm:py-3">
+  <div class="flex items-start justify-between gap-2 sm:gap-4">
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-1.5 sm:gap-2 mb-1 flex-wrap">
+        <% if comment.is_human? %>
+          <span class="text-green-400 text-xs font-bold">👤 <%= comment.commenter_name.presence || comment.user&.username.presence || "익명" %></span>
+        <% else %>
+          <span class="text-white text-xs font-medium"><%= comment.commenter_name || "익명" %></span>
+        <% end %>
+        <span class="text-gray-600 text-xs"><%= comment.created_at.strftime("%m.%d %H:%M") %></span>
+        <% if comment.replies.loaded? && comment.replies.any? %>
+          <span class="text-gray-600 text-xs">답글 <%= comment.replies.size %></span>
+        <% end %>
+      </div>
+      
+      <div class="text-gray-300 text-xs sm:text-sm whitespace-pre-wrap leading-relaxed mb-1.5 sm:mb-2"><%= comment.content %></div>
+      
+      <%# Reply button - only show for top-level comments %>
+      <% if comment.parent_id.nil? %>
+        <button 
+          onclick="toggleReplyForm(<%= comment.id %>)" 
+          class="text-gray-500 hover:text-white text-xs">
+          답글
+        </button>
+      <% end %>
+    </div>
+
+    <% if user_signed_in? && (comment.user == current_user || current_user.admin?) %>
+      <%= button_to post_comment_path(comment.post, comment), method: :delete, data: { turbo_confirm: "댓글을 삭제하시겠습니까?" }, class: "text-gray-600 hover:text-white text-xs flex-shrink-0" do %>
+        삭제
+      <% end %>
+    <% end %>
+  </div>
+  
+  <%# Reply form (hidden by default) %>
+  <div id="reply_form_<%= comment.id %>" class="hidden mt-2 sm:mt-3 border-t border-neutral-800 pt-2 sm:pt-3">
+    <%= form_with model: [comment.post, Comment.new], class: "relative" do |f| %>
+      <%= f.hidden_field :parent_id, value: comment.id %>
+      <% if user_signed_in? %>
+        <div class="w-full bg-neutral-900 border-b border-neutral-800 text-green-400 p-2 text-xs font-bold flex items-center gap-2">
+          <span>👤 <%= current_user.username.presence || current_user.email.split('@').first %></span>
+        </div>
+        <%= f.hidden_field :commenter_name, value: current_user.username.presence || current_user.email.split('@').first %>
+      <% else %>
+        <%= f.text_field :commenter_name, placeholder: "이름 (선택사항)", class: "w-full bg-neutral-900 border-b border-neutral-800 text-white placeholder-gray-600 focus:ring-0 p-2 text-xs" %>
+      <% end %>
+      <%= f.text_area :content, rows: 2, placeholder: "@#{comment.commenter_name || '익명'}에게 답글...", class: "w-full bg-neutral-900 border-0 text-white placeholder-gray-600 focus:ring-0 resize-none p-2 text-xs" %>
+      <div class="border-t border-neutral-800 p-1.5 sm:p-2 text-right flex gap-2 justify-end">
+        <button type="button" onclick="toggleReplyForm(<%= comment.id %>)" class="text-gray-400 hover:text-white text-xs px-2 py-1">취소</button>
+        <%= f.submit "답글 작성", class: "bg-white text-black px-2 sm:px-3 py-1 text-xs hover:bg-gray-300 cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+  
+  <%# Display replies - use preloaded data %>
+  <% if comment.replies.loaded? && comment.replies.any? %>
+    <div class="mt-2">
+      <% comment.replies.each do |reply| %>
+        <%= render partial: "comments/comment", locals: { comment: reply } %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

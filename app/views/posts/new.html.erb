@@ -1,0 +1,36 @@
+<main class="max-w-2xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <%= link_to "← 목록으로", posts_path, class: "text-gray-400 hover:text-white text-sm" %>
+  </div>
+
+  <div class="border border-neutral-800 p-8">
+    <h1 class="text-xl font-bold text-white mb-6">새 게시글 작성</h1>
+
+    <%= form_with model: @post, class: "space-y-6" do |f| %>
+      <% if @post.errors.any? %>
+        <div class="border border-neutral-700 p-4">
+          <ul class="text-gray-400 text-sm space-y-1 ml-4 list-disc">
+            <% @post.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :title, "제목", class: "block text-sm font-medium text-white mb-2" %>
+        <%= f.text_field :title, placeholder: "제목을 입력하세요", class: "w-full bg-neutral-900 border border-neutral-700 p-3 text-white placeholder-gray-600 focus:border-white focus:ring-0 outline-none text-sm" %>
+      </div>
+
+      <div>
+        <%= f.label :content, "내용", class: "block text-sm font-medium text-white mb-2" %>
+        <%= f.text_area :content, rows: 15, placeholder: "내용을 입력하세요...", class: "w-full bg-neutral-900 border border-neutral-700 p-3 text-white placeholder-gray-600 focus:border-white focus:ring-0 outline-none resize-none text-sm leading-relaxed" %>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-neutral-800">
+        <%= link_to "취소", posts_path, class: "px-6 py-2 text-gray-400 hover:text-white" %>
+        <%= f.submit "게시하기", class: "bg-white text-black px-6 py-2 hover:bg-gray-300 cursor-pointer text-sm" %>
+      </div>
+    <% end %>
+  </div>
+</main>

@@ -5,3 +5,5 @@
 <%= turbo_stream.replace "new_message_form" do %>
   <%= render "chat_rooms/message_form", chat_room: @chat_room, chat_message: ChatMessage.new %>
 <% end %>
+
+<div data-action="turbo:after-stream-render->chat-room#messageAdded"></div>

@@ -1,0 +1,306 @@
+/* app/assets/stylesheets/mobile-first.css */
+/* v4.0: Gemini 3.0 Inspired Design - 360px Premium Mobile First */
+
+:root {
+    --bg-primary: #0f1115;
+    /* 더 깊은 블랙 */
+    --bg-secondary: #1a1d24;
+    --bg-glass: rgba(26, 29, 36, 0.85);
+
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --text-accent: #4ade80;
+    /* 밝은 네온 그린 */
+
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-active: rgba(74, 222, 128, 0.5);
+
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transform: translateZ(0);
+    /* 하드웨어 가속 */
+}
+
+/* ===== 360px Optimized Typography ===== */
+.page-header h1 {
+    font-size: 18px;
+    /* 조금 더 크게 */
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #a7f3d0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+/* ===== Glassmorphism Tabs ===== */
+/* 스크롤 가능한 탭 컨테이너 */
+.tabs-container {
+    display: flex;
+    gap: 8px;
+    padding: 0 4px 12px 4px;
+    /* 하단 패딩 확보 */
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+    mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    /* 오른쪽 페이드 아웃 */
+}
+
+.tabs-container::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.tab-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    /* 둥근 캡슐 형태 */
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+    touch-action: manipulation;
+}
+
+.tab-link.active {
+    background: rgba(74, 222, 128, 0.1);
+    border-color: var(--border-active);
+    color: var(--text-accent);
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
+}
+
+/* Sub Tabs (Market Categories) */
+.sub-tabs-container {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+    overflow-x: auto;
+}
+
+.sub-tab {
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    /* 레이아웃 흔들림 방지 */
+    border-radius: 12px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    touch-action: manipulation;
+}
+
+.sub-tab.active {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-weight: 600;
+}
+
+/* ===== Mersoom-inspired Minimalist List Design ===== */
+.posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    /* 갭 제거 */
+    background: transparent;
+    border-radius: 0;
+}
+
+.card-unified {
+    display: block;
+    background: transparent;
+    /* 배경 투명화 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    /* 아주 얇은 구분선 */
+    padding: 10px 4px;
+    /* 좌우 패딩 축소 */
+    text-decoration: none;
+    position: relative;
+    touch-action: manipulation;
+    transition: background-color 0.2s ease;
+}
+
+.card-unified:active {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.card-row {
+    display: flex;
+    align-items: center;
+    /* 수직 중앙 정렬 */
+    gap: 6px;
+    min-width: 0;
+    height: 20px;
+    /* 높이 고정으로 줄바꿈 방지 */
+}
+
+/* 타이틀: 무조건 1줄 */
+.card-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: -0.3px;
+
+    /* 1줄 강제 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+/* 메타 정보 그룹 제거됨 -> 직접 스타일링 */
+.card-price {
+    flex-shrink: 0;
+    /* 가격은 줄어들지 않음 */
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    /* 11px -> 9px 사이즈 대폭 축소 */
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-left: auto;
+    /* 우측 끝으로 밀기 */
+}
+
+.card-info-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #52525b;
+}
+
+/* 가격 강조 */
+.card-price {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    /* 숫자 가독성 */
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-accent);
+    letter-spacing: -0.5px;
+}
+
+/* 배지 스타일 개선 */
+.badge {
+    flex-shrink: 0;
+    padding: 2px 6px;
+    /* 내부 여백 축소 */
+    border-radius: 4px;
+    font-size: 10px;
+    /* 360px 최적화 */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.badge-hotdeal {
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+    color: white;
+}
+
+.badge-discount {
+    background: #7f1d1d;
+    color: #fca5a5;
+    margin-left: 2px;
+}
+
+.badge-condition {
+    background: #065f46;
+    color: #6ee7b7;
+    border: 1px solid rgba(110, 231, 183, 0.2);
+}
+
+.badge-network {
+    background: #4c1d95;
+    color: #c4b5fd;
+    border: 1px solid rgba(196, 181, 253, 0.2);
+}
+
+/* 메타 정보 (작성자, 댓글 수) */
+.card-meta,
+.card-icon {
+    font-size: 11px;
+    color: #6b7280;
+    margin-left: 2px;
+}
+
+.card-author {
+    margin-top: 4px;
+    /* 제목과 간격 */
+    font-size: 11px;
+    color: #52525b;
+    /* 더 어둡게 */
+    padding-left: 1px;
+}
+
+/* ===== Animation ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-unified {
+    animation: fadeInUp 0.3s ease-out backwards;
+}
+
+/* 순차적 애니메이션 딜레이 (최대 10개까지만) */
+.card-unified:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.card-unified:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.card-unified:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+/* ===== 640px+ (Tablet/Desktop) ===== */
+@media (min-width: 640px) {
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .card-unified {
+        padding: 14px 16px;
+    }
+
+    .card-title {
+        font-size: 15px;
+    }
+
+    .card-price {
+        font-size: 14px;
+    }
+}

@@ -1,1 +1,74 @@
 @import "tailwindcss";
+
+@layer components {
+  /* Custom components for better consistency */
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 cursor-pointer;
+  }
+  
+  .btn-success {
+    @apply bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 cursor-pointer;
+  }
+  
+  .btn-danger {
+    @apply bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 cursor-pointer;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200;
+  }
+  
+  .form-container {
+    @apply max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6;
+  }
+  
+  .auth-container {
+    @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100;
+  }
+  
+  .auth-card {
+    @apply bg-white p-8 rounded-lg shadow-xl w-full max-w-md;
+  }
+  
+  .auth-header {
+    @apply text-center mb-8;
+  }
+  
+  .auth-logo {
+    @apply w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4;
+  }
+  
+  .page-title {
+    @apply text-3xl font-bold text-gray-900 mb-6;
+  }
+  
+  .section-title {
+    @apply text-2xl font-bold text-gray-900 mb-4;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.10);
+  }
+  
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+}

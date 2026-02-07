@@ -6,26 +6,20 @@ Rails.application.configure do
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 
-  # Do not eager load code on boot.
-  config.eager_load = false
+  # v3.5: Eager load for faster responses (production-like)
+  config.eager_load = true
 
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  # Enable server timing.
-  config.server_timing = true
+  # v3.5: Disable server timing (overhead)
+  config.server_timing = false
 
-  # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
-  # Run rails dev:cache to toggle Action Controller caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
-    config.action_controller.perform_caching = true
-    config.action_controller.enable_fragment_cache_logging = true
-    config.public_file_server.headers = { "cache-control" => "public, max-age=#{2.days.to_i}" }
-  else
-    config.action_controller.perform_caching = false
-  end
+  # v3.5: Enable caching
+  config.action_controller.perform_caching = true
+  config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.hour.to_i}" }
 
-  # Change to :null_store to avoid any caching.
+  # Use memory store for fast caching
   config.cache_store = :memory_store
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
@@ -38,7 +32,9 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "localhost"), port: 3000 }
+  config.action_controller.default_url_options = { host: ENV.fetch("APP_HOST", "localhost"), port: 3000 }
+  Rails.application.routes.default_url_options = { host: ENV.fetch("APP_HOST", "localhost"), port: 3000 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -46,20 +42,20 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-  # Highlight code that triggered database queries in logs.
-  config.active_record.verbose_query_logs = true
+  # v3.5: Disable verbose query logs (performance)
+  config.active_record.verbose_query_logs = false
 
-  # Append comments with runtime information tags to SQL queries in logs.
-  config.active_record.query_log_tags_enabled = true
+  # v3.5: Disable query log tags (performance)
+  config.active_record.query_log_tags_enabled = false
 
-  # Highlight code that enqueued background job in logs.
-  config.active_job.verbose_enqueue_logs = true
+  # v3.5: Disable verbose job logs (performance)
+  config.active_job.verbose_enqueue_logs = false
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
-  # Annotate rendered view with file names.
-  config.action_view.annotate_rendered_view_with_filenames = true
+  # v3.5: Disable view annotation (performance)
+  config.action_view.annotate_rendered_view_with_filenames = false
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true

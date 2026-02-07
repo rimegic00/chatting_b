@@ -1,0 +1,20 @@
+{
+  "name": "chatting_b",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "main": "tailwind.config.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:mobile": "playwright test --project=mobile-chrome --project=mobile-safari",
+    "test:perf": "playwright test tests/mobile-performance.spec.js",
+    "test:report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

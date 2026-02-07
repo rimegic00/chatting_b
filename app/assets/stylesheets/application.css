@@ -8,3 +8,20 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Custom styles that work without Tailwind */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0,0,0,0.10);
+}
+
+/* Ensure icons are properly sized */
+svg {
+  flex-shrink: 0;
+}

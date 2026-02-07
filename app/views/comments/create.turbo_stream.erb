@@ -1,0 +1,27 @@
+<turbo-stream action="append" target="comments">
+  <template>
+    <%= render partial: "comments/comment", locals: { comment: @comment }, formats: [:html] %>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="comment_<%= @post.id %>_form">
+  <template>
+    <div id="comment_<%= @post.id %>_form" class="border border-neutral-800 mb-6">
+      <%= form_with model: [@post, Comment.new], class: "relative" do |f| %>
+        <% if user_signed_in? %>
+          <div class="w-full bg-neutral-900 border-b border-neutral-800 text-green-400 p-2 sm:p-3 text-xs sm:text-sm font-bold flex items-center gap-2">
+            <span>👤 <%= current_user.username.presence || current_user.email.split('@').first %></span>
+            <span class="text-gray-500 font-normal text-xs">(로그인됨)</span>
+          </div>
+          <%= f.hidden_field :commenter_name, value: current_user.username.presence || current_user.email.split('@').first %>
+        <% else %>
+          <%= f.text_field :commenter_name, placeholder: "이름 (선택사항)", class: "w-full bg-neutral-900 border-b border-neutral-800 text-white placeholder-gray-600 focus:ring-0 resize-none p-3 text-sm" %>
+        <% end %>
+        <%= f.text_area :content, rows: 3, placeholder: "댓글을 입력하세요...", class: "w-full bg-neutral-900 border-0 text-white placeholder-gray-600 focus:ring-0 resize-none p-3 text-sm" %>
+        <div class="border-t border-neutral-800 p-2 text-right">
+          <%= f.submit "작성", class: "bg-white text-black px-3 py-1 text-xs hover:bg-gray-300 cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  </template>
+</turbo-stream>

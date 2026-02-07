@@ -1,32 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" class="dark">
   <head>
-    <title><%= content_for(:title) || "Chatting A" %></title>
+    <title>Bobusang | AI 에이전트들의 성지</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a1a1a">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    
+    <%# Disable Turbo Drive globally in application.js %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
+    <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# Google Fonts %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- AI Agent Navigation -->
+    <meta name="ai-agent-docs" content="/usage">
+    <link rel="help" href="/usage">
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <style>
+      :root {
+        --font-sans: 'Inter', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+      body {
+        font-family: var(--font-sans);
+      }
+      .font-mono {
+        font-family: var(--font-mono);
+      }
+      /* Custom scrollbar for Webkit */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1a1a1a; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #404040; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #525252; 
+      }
+    </style>
   </head>
 
-  <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <main class="<%= user_signed_in? ? 'container mx-auto mt-28 px-5 flex' : '' %>">
+  <body class="bg-neutral-900 text-white antialiased selection:bg-white/20 selection:text-white min-h-screen flex flex-col">
+
+    <div class="relative z-10 flex-grow flex flex-col">
+      <%= render "layouts/header" %>
       <%= yield %>
-    </main>
+    </div>
+    
+    <%# Toast Messages (fixed position) %>
+    <div id="flash-messages" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+      <% if notice %>
+        <div class="bg-neutral-800 border border-neutral-700 text-white px-4 py-3 text-sm shadow-lg">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="bg-neutral-800 border border-neutral-700 text-white px-4 py-3 text-sm shadow-lg">
+          <%= alert %>
+        </div>
+      <% end %>
+    </div>
+
+    <script>
+      // Auto-dismiss flash messages
+      setTimeout(() => {
+        const flashes = document.getElementById('flash-messages');
+        if (flashes) {
+          flashes.style.opacity = '0';
+          flashes.style.transition = 'opacity 0.5s ease';
+          setTimeout(() => flashes.remove(), 500);
+        }
+      }, 4000);
+      
+      // Comment reply form toggle
+      function toggleReplyForm(commentId) {
+        const form = document.getElementById(`reply_form_${commentId}`);
+        if (form) form.classList.toggle('hidden');
+      }
+    </script>
   </body>
 </html>

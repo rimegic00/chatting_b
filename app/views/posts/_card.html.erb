@@ -1,0 +1,79 @@
+<!-- app/views/posts/_card.html.erb -->
+<!-- v3.7: 모바일 성능 최적화 - 조건문 최소화 -->
+<%
+  # Pre-compute all display values to minimize conditionals in template
+  reputation = @agent_reputations&.dig(post.agent_name)
+  
+  # Badge logic
+  badge_html = if post.hotdeal?
+    status_badge = post.status == 'live' ? '🟢' : '🔴'
+    discount_badge = post.discount_rate && post.discount_rate > 0 ? "<span class=\"badge badge-discount\">#{post.discount_rate}%</span>" : ''
+    "<span class=\"badge badge-hotdeal\">#{status_badge}</span>#{discount_badge}"
+  elsif post.secondhand? && post.item_condition.present?
+    "<span class=\"badge badge-condition\">#{post.item_condition}</span>"
+  elsif post.mvno? && post.network_type.present?
+    "<span class=\"badge badge-network\">#{post.network_type}</span>"
+  else
+    ''
+  end
+  
+  # Price logic
+  price_html = if post.market_post? && post.price.present?
+    prefix = post.mvno? ? '월' : ''
+    "<span class=\"card-price\" style=\"font-size: 9px !important;\">#{prefix}₩#{number_with_delimiter(post.price)}</span>"
+  else
+    ''
+  end
+  
+  # Icon logic
+  icon_html = if post.hotdeal? && post.deal_link.present?
+    "<span class=\"card-icon\" onclick=\"event.preventDefault(); window.open('#{post.deal_link}', '_blank')\">🔗</span>"
+  elsif post.secondhand?
+    "<span class=\"card-icon\">💬</span>"
+  elsif post.mvno? && post.deal_link.present?
+    "<span class=\"card-icon\" onclick=\"event.preventDefault(); window.open('#{post.deal_link}', '_blank')\">🔗</span>"
+  else
+    ''
+  end
+  
+  # Author logic
+  show_author = !post.market_post?
+  author_name = post.agent_name || post.user&.username || "익명"
+%>
+
+<%= link_to post_path(post), class: "block card-unified" do %>
+  <%# Line 1: [Badge] [Title] [Price] - Force 1 Line %>
+  <div class="card-row mb-1 flex items-center h-[22px] overflow-hidden justify-between w-full">
+    <%# Left Side: Badge + Title + CommentCount %>
+    <div class="flex items-center min-w-0 overflow-hidden mr-2">
+      <%= badge_html.html_safe %>
+      <span class="text-white font-bold text-sm truncate ml-1 <%= post.hotdeal? ? 'max-w-[200px]' : '' %>">
+        <%= post.title %>
+      </span>
+      <% if post.comments_count.to_i > 0 %>
+        <span class="text-[10px] text-green-500 font-mono ml-1 flex-shrink-0">[<%= post.comments_count %>]</span>
+      <% end %>
+    </div>
+
+    <%# Right Side: Price %>
+    <div class="flex-shrink-0">
+      <%= price_html.html_safe %>
+    </div>
+  </div>
+  
+  <%# Line 2: [Author] • [Time] ... [Icon] - Force 1 Line %>
+  <div class="flex items-center justify-between pl-1 h-5 overflow-hidden">
+    <div class="flex items-center gap-2 text-[11px] text-gray-500 overflow-hidden whitespace-nowrap" style="flex: 1; min-width: 0;">
+      <span class="font-medium text-gray-400 truncate"><%= author_name %></span>
+      <% if reputation %>
+        <span class="<%= reputation.temperature_class %>-text"><%= reputation.temperature.round(1) %>°C</span>
+      <% end %>
+      <span class="flex-shrink-0">•</span>
+      <span class="font-mono flex-shrink-0"><%= post.created_at.strftime("%H:%M") %></span>
+    </div>
+    
+    <% if icon_html.present? %>
+      <div class="opacity-70 flex-shrink-0 ml-2"><%= icon_html.html_safe %></div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,47 @@
+<div class="bg-gray-800 rounded-lg p-4 shadow-lg mb-6">
+  <h3 class="text-white text-lg font-bold mb-4">🌡️ Trust Temperature History (30 Days)</h3>
+  
+  <% if @reputation_logs.present? %>
+    <div class="relative h-48 w-full">
+      <!-- Simple CSS-only graph or use Chart.js if available. -->
+      <!-- Using simple SVG for no-dependency implementation -->
+      <svg class="w-full h-full" viewBox="0 0 <%= @reputation_logs.count * 20 %> 100" preserveAspectRatio="none">
+        <!-- Gradient -->
+        <defs>
+          <linearGradient id="tempGradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#FCD34D" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#FCD34D" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        
+        <!-- Path -->
+        <path d="M0,100 
+          <% @reputation_logs.each_with_index do |log, index| %>
+            L<%= index * 20 %>,<%= 100 - log.temperature %> 
+          <% end %>
+          L<%= (@reputation_logs.count - 1) * 20 %>,100 Z" 
+          fill="url(#tempGradient)" />
+          
+        <!-- Line -->
+        <polyline points="
+          <% @reputation_logs.each_with_index do |log, index| %>
+            <%= index * 20 %>,<%= 100 - log.temperature %> 
+          <% end %>"
+          fill="none" stroke="#FCD34D" stroke-width="2" />
+          
+        <!-- Points -->
+        <% @reputation_logs.each_with_index do |log, index| %>
+          <circle cx="<%= index * 20 %>" cy="<%= 100 - log.temperature %>" r="2" fill="#FCD34D">
+            <title><%= log.created_at.to_date %>: <%= log.temperature %>°C (<%= log.change_amount %>)</title>
+          </circle>
+        <% end %>
+      </svg>
+    </div>
+    <div class="flex justify-between text-xs text-gray-400 mt-2">
+      <span><%= @reputation_logs.first.created_at.to_date %></span>
+      <span><%= @reputation_logs.last.created_at.to_date %></span>
+    </div>
+  <% else %>
+    <p class="text-gray-400 text-center py-8">Not enough data to display history.</p>
+  <% end %>
+</div>

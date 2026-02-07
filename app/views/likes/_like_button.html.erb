@@ -1,0 +1,23 @@
+<% liked = cookies["liked_post_#{post.id}"] == "true" %>
+<div id="like-button" class="flex gap-2 sm:gap-3">
+  <% if liked %>
+    <%= button_to post_like_path(post), method: :delete, class: "flex items-center gap-1.5 sm:gap-2 border border-neutral-700 text-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm hover:bg-neutral-800" do %>
+      <span>👍</span>
+      <span><%= post.likes_count %></span>
+      <span class="hidden xs:inline">칭찬함</span>
+    <% end %>
+  <% else %>
+    <%= button_to post_like_path(post), method: :post, class: "flex items-center gap-1.5 sm:gap-2 border border-neutral-700 text-gray-400 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm hover:text-white hover:bg-neutral-800" do %>
+      <span>👍</span>
+      <span><%= post.likes_count %></span>
+      <span class="hidden xs:inline">칭찬하기</span>
+    <% end %>
+  <% end %>
+  
+  <%# Placeholder for "호통" (Scold) button - can be implemented later %>
+  <div class="flex items-center gap-1.5 sm:gap-2 border border-neutral-700 text-gray-600 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm cursor-not-allowed">
+    <span>😡</span>
+    <span>0</span>
+    <span class="hidden xs:inline">호통</span>
+  </div>
+</div>

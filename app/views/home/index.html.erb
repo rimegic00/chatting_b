@@ -1,13 +1,123 @@
-<div class="flex flex-col items-center justify-center h-full">
-  <h1 class="font-bold text-4xl mb-8">환영합니다!</h1>
+<% if user_signed_in? %>
+  <!-- Dashboard for logged in users -->
+  <div class="max-w-6xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">안녕하세요, <%= current_user.email %>님! 👋</h1>
+        <p class="text-lg text-gray-600 mb-8">채팅방에서 다른 사용자들과 소통해보세요.</p>
+        <%= link_to "채팅방 둘러보기", chat_rooms_path, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-200" %>
+      </div>
+    </div>
 
-  <% if user_signed_in? %>
-    <p class="text-lg mb-4">안녕하세요, <%= current_user.email %>님!</p>
-    <%= link_to "채팅방으로 이동", chat_rooms_path, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-xl" %>
-    <%= link_to "로그아웃", destroy_user_session_path, data: { turbo_method: :delete }, class: "mt-4 text-blue-500 hover:underline" %>
-  <% else %>
-    <p class="text-lg mb-4">채팅 서비스를 이용하시려면 로그인 또는 회원가입을 해주세요.</p>
-    <%= link_to "로그인", new_user_session_path, class: "bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-xl mb-4" %>
-    <%= link_to "회원가입", new_user_registration_path, class: "bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-lg text-xl" %>
-  <% end %>
-</div>
+    <!-- User Search Form -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">사용자 검색</h2>
+      <div class="mb-6">
+        <%= form_with url: root_path, method: :get, class: "flex items-center space-x-2" do |form| %>
+          <%= form.text_field :query, value: params[:query], placeholder: "사용자 이름 또는 이메일 검색...", class: "flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          <%= form.submit "검색", class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md cursor-pointer" %>
+        <% end %>
+      </div>
+    </div>
+
+    <% if params[:query].present? %>
+      <!-- Search Results -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">검색 결과</h2>
+        <% if @search_results_users.any? %>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% @search_results_users.each do |user| %>
+              <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                  <%= tabler_icon "user", class: "w-8 h-8 text-blue-500" %>
+                  <span class="text-lg font-medium text-gray-800"><%= user.username || user.email %></span>
+                </div>
+                <%= link_to "1:1 채팅", create_private_chat_room_path(user_id: user.id), data: { turbo_method: :post }, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm" %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="bg-white rounded-lg shadow-md p-6 text-center text-gray-600">
+            <p>검색 결과가 없습니다.</p>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <!-- My Chat Rooms -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">내 채팅방</h2>
+        <% if @chat_rooms.any? %>
+          <div class="bg-white rounded-lg shadow-md divide-y divide-gray-100">
+            <% @chat_rooms.each do |chat_room| %>
+              <%= link_to chat_room_path(chat_room), class: "flex items-center p-4 hover:bg-gray-50 transition duration-200" do %>
+                <% if chat_room.is_private? %>
+                  <%= tabler_icon "user", class: "w-10 h-10 text-blue-500 flex-shrink-0 mr-4" %>
+                <% else %>
+                  <%= tabler_icon "users", class: "w-10 h-10 text-green-500 flex-shrink-0 mr-4" %>
+                <% end %>
+                <div class="flex-1">
+                  <h3 class="text-lg font-semibold text-gray-900"><%= chat_room.display_title(current_user) %></h3>
+                  <p class="text-gray-600 text-sm"><%= chat_room.is_private? ? "1:1 채팅" : chat_room.description %></p>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="bg-white rounded-lg shadow-md p-6 text-center text-gray-600">
+            <p>아직 참여하고 있는 채팅방이 없습니다. 새로운 채팅방을 시작하거나 다른 사용자와 1:1 채팅을 시작해보세요!</p>
+            <%= link_to "사용자 목록 보기", users_path, class: "mt-4 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg text-sm transition duration-200" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Quick Stats or Recent Activity could go here -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <%= tabler_icon "message-circle", class: "w-6 h-6 text-blue-600" %>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">실시간 채팅</h3>
+        <p class="text-gray-600">다른 사용자들과 실시간으로 대화하세요</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <%= tabler_icon "users", class: "w-6 h-6 text-green-600" %>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">다양한 채팅방</h3>
+        <p class="text-gray-600">관심사별로 나뉜 채팅방에 참여하세요</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <%= tabler_icon "paperclip", class: "w-6 h-6 text-purple-600" %>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">파일 공유</h3>
+        <p class="text-gray-600">이미지와 파일을 쉽게 공유하세요</p>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <!-- Landing page for non-logged in users -->
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div class="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+          <span class="text-white font-bold text-2xl">C</span>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Chatting A</h1>
+        <p class="text-gray-600 mb-8">실시간 채팅으로 소통하는 새로운 방법</p>
+        
+        <div class="space-y-4">
+          <%= link_to "로그인", new_user_session_path, class: "w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200 block text-center" %>
+          <%= link_to "회원가입", new_user_registration_path, class: "w-full bg-white hover:bg-gray-50 text-blue-500 font-bold py-3 px-6 rounded-lg border-2 border-blue-500 transition duration-200 block text-center" %>
+        </div>
+        
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <p class="text-sm text-gray-500">✨ 무료로 시작하세요</p>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

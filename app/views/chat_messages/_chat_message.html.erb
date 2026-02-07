@@ -1,12 +1,38 @@
-<div class="mb-2 p-2 rounded-lg <%= chat_message.user == current_user ? 'bg-blue-100 self-end' : 'bg-gray-100 self-start' %>">
-  <p class="text-sm font-semibold"><%= chat_message.user.email %></p>
-  <p class="text-base"><%= chat_message.content %></p>
-  <% if chat_message.file.attached? %>
-    <% if chat_message.file.image? %>
-      <%= image_tag chat_message.file, class: "max-w-xs mt-2" %>
-    <% else %>
-      <%= link_to chat_message.file.filename, rails_blob_path(chat_message.file, disposition: "attachment"), class: "text-blue-500 hover:underline mt-2 block" %>
+<div class="flex <%= chat_message.user == current_user ? 'justify-end' : 'justify-start' %> mb-4">
+  <div class="flex flex-col <%= chat_message.user == current_user ? 'items-end' : 'items-start' %>">
+    <% unless chat_message.user == current_user %>
+      <p class="text-xs font-medium text-gray-600 mb-1"><%= chat_message.user.username || chat_message.user.email %></p>
     <% end %>
-  <% end %>
-  <p class="text-xs text-gray-500 text-right"><%= chat_message.created_at.strftime("%H:%M") %></p>
+    <div class="flex items-end">
+      <div class="max-w-xs lg:max-w-md">
+        <div class="<%= chat_message.user == current_user ? 'bg-blue-500 text-white rounded-bl-xl rounded-tl-xl rounded-tr-xl' : 'bg-white border border-gray-200 rounded-br-xl rounded-tr-xl rounded-tl-xl' %> px-4 py-2 shadow-sm">
+          <% if chat_message.content.present? %>
+            <p class="text-sm leading-relaxed"><%= simple_format(chat_message.content) %></p>
+          <% end %>
+          
+          <% if chat_message.file.attached? %>
+            <div class="mt-2">
+              <% if chat_message.file.image? %>
+                <%= image_tag chat_message.file, class: "max-w-full h-auto rounded-lg" %>
+              <% else %>
+                <div class="<%= chat_message.user == current_user ? 'bg-blue-600' : 'bg-gray-100' %> rounded-lg p-3 flex items-center space-x-2">
+                  <%= tabler_icon "paperclip", class: "w-5 h-5 #{chat_message.user == current_user ? 'text-blue-200' : 'text-gray-500'}" %>
+                  <%= link_to chat_message.file.filename, rails_blob_path(chat_message.file, disposition: "attachment"), class: "text-sm #{chat_message.user == current_user ? 'text-blue-100 hover:text-white' : 'text-gray-700 hover:text-gray-900'} hover:underline" %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="<%= chat_message.user == current_user ? 'ml-2' : 'mr-2' %>">
+        <p class="text-xs text-gray-500">
+          <%= chat_message.created_at.strftime("%H:%M") %>
+          <% if chat_message.user == current_user %>
+            <span class="ml-1">✓</span>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

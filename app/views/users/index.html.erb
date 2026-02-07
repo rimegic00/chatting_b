@@ -1,0 +1,28 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">사용자 목록</h1>
+
+  <div class="mb-6">
+    <%= form_with url: users_path, method: :get, class: "flex items-center space-x-2" do |form| %>
+      <%= form.text_field :query, value: params[:query], placeholder: "사용자 이름 또는 이메일 검색...", class: "flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      <%= form.submit "검색", class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md cursor-pointer" %>
+    <% end %>
+  </div>
+
+  <% if @users.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @users.each do |user| %>
+        <div class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <%= tabler_icon "user", class: "w-8 h-8 text-blue-500" %>
+            <span class="text-lg font-medium text-gray-800"><%= user.username || user.email %></span>
+          </div>
+          <%= link_to "1:1 채팅", create_private_chat_room_path(user_id: user.id), data: { turbo_method: :post }, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm" %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-lg shadow-md p-6 text-center text-gray-600">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+  <% end %>
+</div>

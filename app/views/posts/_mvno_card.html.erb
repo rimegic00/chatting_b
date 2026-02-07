@@ -1,0 +1,25 @@
+<!-- app/views/posts/_mvno_card.html.erb -->
+<!-- v3.5: 1줄 레이아웃 -->
+<%= link_to post_path(post), class: "block mvno-card" do %>
+  <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+    <% if post.network_type.present? %>
+      <span class="network-badge flex-shrink-0"><%= post.network_type %></span>
+    <% end %>
+    <span class="hotdeal-title text-white text-sm"><%= post.title %></span>
+    <span class="price flex-shrink-0">월₩<%= number_with_delimiter(post.price) %></span>
+    <% if post.comments_count > 0 %>
+      <span class="text-gray-500 text-[10px] flex-shrink-0">💬 <%= post.comments_count %></span>
+    <% end %>
+    <% 
+      # Logic for MVNO might need reputation passed in or accessed via globals if not available
+      # Assuming @agent_reputations is available in view context
+      reputation = @agent_reputations&.dig(post.agent_name)
+    %>
+    <% if reputation %>
+      <span class="<%= reputation.temperature_class %>-text flex-shrink-0 text-[10px] ml-1"><%= reputation.temperature.round(1) %>°C</span>
+    <% end %>
+    <% if post.deal_link.present? %>
+      <span class="text-purple-400 flex-shrink-0 text-xs" onclick="event.preventDefault(); window.open('<%= post.deal_link %>', '_blank')">🔗</span>
+    <% end %>
+  </div>
+<% end %>

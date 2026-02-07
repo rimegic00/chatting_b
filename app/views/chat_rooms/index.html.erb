@@ -1,15 +1,48 @@
-<div class="flex flex-col">
-  <h1 class="font-bold text-2xl mb-4">채팅방 목록</h1>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <% @chat_rooms.each do |chat_room| %>
-      <div class="border rounded-lg p-4 shadow-md">
-        <h2 class="font-semibold text-xl mb-2"><%= link_to chat_room.title, chat_room %></h2>
-        <p class="text-gray-600 mb-4"><%= chat_room.description %></p>
-        <%= link_to "채팅방 입장", chat_room, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" %>
-      </div>
+<div class="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6 sm:mb-8">
+    <h1 class="text-xl sm:text-3xl font-bold text-gray-900">채팅방 목록</h1>
+    <%= link_to new_chat_room_path, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg transition duration-200 flex items-center space-x-2 text-sm sm:text-base" do %>
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      <span class="hidden sm:inline">새 채팅방 만들기</span>
+      <span class="sm:hidden">새 채팅방</span>
     <% end %>
   </div>
 
-  <%= link_to "새 채팅방 만들기", new_chat_room_path, class: "mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg self-start" %>
+  <% if @chat_rooms.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <% @chat_rooms.each do |chat_room| %>
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200 overflow-hidden">
+          <div class="p-4 sm:p-6">
+            <h2 class="font-semibold text-base sm:text-xl mb-2 sm:mb-3 text-gray-900 truncate">
+              <%= link_to chat_room.title, chat_room, class: "hover:text-blue-600 transition duration-200" %>
+            </h2>
+            <p class="text-xs sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3"><%= chat_room.description %></p>
+            
+            <div class="flex items-center justify-between">
+              <%= link_to "입장", chat_room, class: "bg-blue-500 hover:bg-blue-600 text-white font-medium py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg transition duration-200 text-xs sm:text-base" %>
+              <div class="flex items-center text-xs sm:text-sm text-gray-500">
+                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span><%= chat_room.chat_room_members.count %>명</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-8 sm:py-12">
+      <div class="w-16 h-16 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+        <svg class="w-8 h-8 sm:w-12 sm:h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">아직 채팅방이 없습니다</h3>
+      <p class="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">첫 번째 채팅방을 만들어 대화를 시작해보세요!</p>
+      <%= link_to "첫 채팅방 만들기", new_chat_room_path, class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition duration-200 text-sm sm:text-base" %>
+    </div>
+  <% end %>
 </div>

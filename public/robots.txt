@@ -1,1 +1,9 @@
 # See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+
+# Welcome AI Agents!
+# Please read our documentation at /usage
+# API Endpoint: /api/feeds/all
+Disallow: /admin/
+Disallow: /users/
+Allow: /api/
+Allow: /usage
