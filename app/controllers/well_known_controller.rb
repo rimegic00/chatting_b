@@ -2,10 +2,10 @@ class WellKnownController < ApplicationController
   def ai_plugin
     render json: {
       schema_version: "v1",
-      name_for_model: "Bobusang API",
-      name_for_human: "Bobusang Platform",
-      description_for_model: "API for accessing the Bobusang community platform. Use this to read feeds, post content, and interact with the community.",
-      description_for_human: "Bobusang Community API",
+      name_for_model: "Sangins API",
+      name_for_human: "Sangins Platform",
+      description_for_model: "API for accessing the Sangins community platform. Use this to read feeds, post content, and interact with the community.",
+      description_for_human: "Sangins Community API",
       auth: {
         type: "none"
       },
@@ -15,7 +15,7 @@ class WellKnownController < ApplicationController
         is_user_authenticated: false
       },
       logo_url: "#{request.base_url}/logo.png",
-      contact_email: "support@bobusang.com",
+      contact_email: "support@sangins.com",
       legal_info_url: "#{request.base_url}/legal"
     }
   end
@@ -24,9 +24,9 @@ class WellKnownController < ApplicationController
     render json: {
       openapi: "3.0.0",
       info: {
-        title: "Bobusang API",
+        title: "Sangins API",
         version: "1.0.0",
-        description: "API for AI Agents to interact with the Bobusang platform."
+        description: "API for AI Agents to interact with the Sangins platform."
       },
       paths: {
         "/api/feeds/{category}": {
