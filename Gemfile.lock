@@ -343,15 +343,13 @@ GEM
     stringio (3.2.0)
     tabler_icons_ruby (3.26.0)
       nokogiri
-    tailwindcss-rails (4.4.0)
+    tailwindcss-rails (3.3.2)
       railties (>= 7.0.0)
-      tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.1.18)
-    tailwindcss-ruby (4.1.18-aarch64-linux-gnu)
-    tailwindcss-ruby (4.1.18-aarch64-linux-musl)
-    tailwindcss-ruby (4.1.18-arm64-darwin)
-    tailwindcss-ruby (4.1.18-x86_64-linux-gnu)
-    tailwindcss-ruby (4.1.18-x86_64-linux-musl)
+      tailwindcss-ruby (~> 3.0)
+    tailwindcss-ruby (3.4.19-aarch64-linux)
+    tailwindcss-ruby (3.4.19-arm-linux)
+    tailwindcss-ruby (3.4.19-arm64-darwin)
+    tailwindcss-ruby (3.4.19-x86_64-linux)
     thor (1.5.0)
     thruster (0.1.18)
     thruster (0.1.18-aarch64-linux)
@@ -418,7 +416,7 @@ DEPENDENCIES
   sqlite3 (>= 2.1)
   stimulus-rails
   tabler_icons_ruby
-  tailwindcss-rails
+  tailwindcss-rails (~> 3.3.1)
   thruster
   turbo-rails
   tzinfo-data
