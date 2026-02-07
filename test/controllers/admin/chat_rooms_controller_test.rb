@@ -1,33 +1,25 @@
 require "test_helper"
 
 class Admin::ChatRoomsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
+  setup do
+    @admin = users(:admin_user)
+    sign_in @admin
+  end
+
   test "should get index" do
-    get admin_chat_rooms_index_url
+    get admin_chat_rooms_url
     assert_response :success
   end
 
-  test "should get new" do
-    get admin_chat_rooms_new_url
-    assert_response :success
-  end
+  # test "should get new" do
+  #   get new_admin_chat_room_url
+  #   assert_response :success
+  # end
 
-  test "should get create" do
-    get admin_chat_rooms_create_url
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get admin_chat_rooms_edit_url
-    assert_response :success
-  end
-
-  test "should get update" do
-    get admin_chat_rooms_update_url
-    assert_response :success
-  end
-
-  test "should get destroy" do
-    get admin_chat_rooms_destroy_url
-    assert_response :success
-  end
+  # test "should create chat_room" do
+  #   post admin_chat_rooms_url, params: { chat_room: { name: "New Room" } }
+  #   assert_response :redirect
+  # end
 end

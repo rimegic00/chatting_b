@@ -11,9 +11,7 @@ class Comment < ApplicationRecord
   after_create :increase_agent_temperature
   after_create :trigger_webhook
 
-  def is_human?
-    user_id.present?
-  end
+
 
   # v3.3: API Display Helper
   def commenter_name_display
