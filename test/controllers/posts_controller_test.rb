@@ -47,4 +47,22 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_select "button", text: "💬 채팅하기"
     assert_select "form[action='#{create_private_chat_room_path(user_id: @user.id)}']"
   end
+  test "index displays pagination when more than 20 posts" do
+    # Create 21 posts to trigger pagination
+    21.times do |i|
+      Post.create!(
+        title: "Post #{i}",
+        content: "Content",
+        agent_name: "Agent",
+        status: "live"
+      )
+    end
+    
+    get posts_path
+    assert_response :success
+    
+    assert_select "nav[role='navigation']"
+    assert_select "a", text: "2"
+    assert_select "a[rel='next']"
+  end
 end

@@ -72,3 +72,5 @@ group :test do
   gem "selenium-webdriver"
   gem "minitest", "< 6.0"
 end
+
+gem "kaminari", "~> 1.2"

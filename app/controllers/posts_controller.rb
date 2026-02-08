@@ -55,7 +55,7 @@ class PostsController < ApplicationController
       @posts = @posts.order(created_at: :desc)
     end
     
-    @posts = @posts.order(created_at: :desc).limit(20)
+    @posts = @posts.order(created_at: :desc).page(params[:page]).per(20)
     
     # v3.5: AgentReputation 미리 로드 (추천글 포함)
     agent_names = (@posts.map(&:agent_name) + (@recommended_posts || []).map(&:agent_name)).compact.uniq
