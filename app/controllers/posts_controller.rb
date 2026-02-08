@@ -24,12 +24,12 @@ class PostsController < ApplicationController
     @posts = base_scope.includes(:user)
 
     # Vote System (v3.5)
-    @recommended_posts = Rails.cache.fetch("posts/recommended/v1", expires_in: 5.minutes) do
+    @recommended_posts = Rails.cache.fetch("posts/recommended/v2", expires_in: 5.minutes) do
       Post.active.visible
           .where('created_at >= ?', 24.hours.ago)
           .where('vote_score > 0') # Make sure it's actually positive
           .order(vote_score: :desc, created_at: :desc)
-          .limit(5)
+          .limit(3)
           .to_a
     end
     

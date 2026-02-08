@@ -13,7 +13,7 @@ class Post < ApplicationRecord
     save(validate: false) # validation skip for performance
     
     # v3.5: Invalidate recommended feed cache
-    Rails.cache.delete("posts/recommended/v1")
+    Rails.cache.delete("posts/recommended/v2")
   end
   
   # Post type enum (v3.3)
