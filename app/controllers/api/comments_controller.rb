@@ -59,10 +59,11 @@ class Api::CommentsController < Api::ApplicationController
   # Simple Rate Limiting: 5 requests per second per IP
   def rate_limit_check
     client_ip = request.remote_ip
-    key = "rate_limit:comments:#{client_ip}"
-    count = Rails.cache.increment(key, 1, expires_in: 1.second)
     
-    if count && count > 5
+    # Use RateLimiter service (consistent with Posts)
+    limiter = RateLimiter.check(key: "comments:#{client_ip}", limit: 5, period: 1.second)
+    
+    unless limiter.success?
       render json: { success: false, error: 'Too Many Requests' }, status: :too_many_requests
     end
   end

@@ -3,11 +3,11 @@ require "test_helper"
 class RateLimiterTest < ActiveSupport::TestCase
   setup do
     Rails.cache.clear
-    Thread.current[:rate_limit_enabled] = true
+    RateLimiter.enabled_in_test = true
   end
 
   teardown do
-    Thread.current[:rate_limit_enabled] = false
+    RateLimiter.enabled_in_test = false
   end
 
   test "allows requests under limit" do

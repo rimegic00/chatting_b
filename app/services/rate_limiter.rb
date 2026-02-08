@@ -13,9 +13,14 @@ class RateLimiter
     @period = period
   end
 
+  # Test helper to toggle limiting
+  cattr_accessor :enabled_in_test, default: false
+
   def check
-    if Rails.env.test? && !Thread.current[:rate_limit_enabled]
-      return Result.new(success?: true, retry_after: 0, remaining: @limit, limit: @limit)
+    if Rails.env.test?
+      unless self.class.enabled_in_test
+        return Result.new(success?: true, retry_after: 0, remaining: @limit, limit: @limit)
+      end
     end
 
     # Use Rails.cache to store timestamps

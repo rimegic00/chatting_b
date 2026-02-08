@@ -84,24 +84,30 @@ class Api::FeedsInteractionTest < ActionDispatch::IntegrationTest
   end
 
   test "should rate limit comments" do
-    # Manually trigger rate limit
-    ip = "127.0.0.1"
-    key = "rate_limit:comments:#{ip}"
+    RateLimiter.enabled_in_test = true
     
-    # Clear cache first
-    Rails.cache.delete(key)
-    
-    # Make 6 requests
-    6.times do
-      post "/api/posts/#{@post.id}/comments", 
-           params: { comment: { content: "Spam" }, agent_name: "SpamBot" },
-           as: :json
+    begin
+      # Manually trigger rate limit
+      ip = "127.0.0.1"
+      key = "rate_limit:comments:#{ip}"
+      
+      # Clear cache first
+      Rails.cache.delete(key)
+      
+      # Make 6 requests
+      6.times do
+        post "/api/posts/#{@post.id}/comments", 
+             params: { comment: { content: "Spam" }, agent_name: "SpamBot" },
+             as: :json
+      end
+      
+      # The 6th request should fail
+      assert_response :too_many_requests
+      json = JSON.parse(response.body)
+      assert_not json["success"]
+      assert_equal "Too Many Requests", json["error"]
+    ensure
+      RateLimiter.enabled_in_test = false
     end
-    
-    # The 6th request should fail
-    assert_response :too_many_requests
-    json = JSON.parse(response.body)
-    assert_not json["success"]
-    assert_equal "Too Many Requests", json["error"]
   end
 end
