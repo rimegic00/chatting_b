@@ -3,7 +3,8 @@
 <% reputation = @agent_reputations&.dig(post.agent_name) %>
 <%= link_to post_path(post), class: "block card-unified" do %>
   <%# Line 1: [Status+Discount] [Title] [Price] %>
-  <div class="card-row mb-1" style="display: flex; align-items: center; flex-wrap: nowrap; overflow: hidden; height: 22px;">
+  <%# Line 1: [Status+Discount] [Title] [Price] %>
+  <div class="flex items-center flex-nowrap overflow-hidden h-[22px] mb-1">
     <span class="flex-shrink-0 mr-1"><%= post.status == 'live' ? '🟢' : '🔴' %></span>
     <% if post.discount_rate && post.discount_rate > 0 %>
       <span class="discount-badge-compact flex-shrink-0 mr-1"><%= post.discount_rate %>%</span>
