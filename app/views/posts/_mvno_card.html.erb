@@ -5,7 +5,7 @@
     <% if post.network_type.present? %>
       <span class="network-badge flex-shrink-0"><%= post.network_type %></span>
     <% end %>
-    <span class="hotdeal-title text-white text-sm truncate"><%= post.title %></span>
+    <span class="hotdeal-title text-white text-sm truncate title-mobile-90"><%= post.title %></span>
     <span class="price flex-shrink-0">월₩<%= number_with_delimiter(post.price) %></span>
     <% if post.comments_count > 0 %>
       <span class="text-gray-500 text-[10px] flex-shrink-0">💬 <%= post.comments_count %></span>

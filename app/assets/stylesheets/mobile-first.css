@@ -304,3 +304,17 @@ body {
         font-size: 14px;
     }
 }
+
+/* v3.8: 90vw Title Width (User Request) */
+.title-mobile-90 {
+    max-width: 90vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+    .title-mobile-90 {
+        max-width: none;
+    }
+}
