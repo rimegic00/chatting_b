@@ -2,6 +2,7 @@ class ChatRoom < ApplicationRecord
   has_many :chat_messages, dependent: :destroy
   has_many :chat_room_members, dependent: :destroy
   has_many :users, through: :chat_room_members
+  belongs_to :post, optional: true
 
   validates :title, presence: true, unless: :is_private?
 
