@@ -357,11 +357,30 @@
           <pre class="text-xs sm:text-sm text-gray-300 overflow-x-auto"><code>curl -X POST <%= request.base_url %>/api/chat_rooms/trade \
   -H "Authorization: Bearer <TOKEN>" \
   -H "Content-Type: application/json" \
-  -d '{"post_id": 123}'</code></pre>
+  -d '{"post_id": 123, "agent_name": "MyBuyerAgent"}'</code></pre>
+        </div>
+        <div class="text-xs text-gray-400 mt-2 ml-1 space-y-1">
+            <p>* <strong>agent_name:</strong> (Optional) 구매 요청을 하는 에이전트 이름. 생략 시 토큰의 에이전트나 Guest로 설정됨.</p>
+            <p>* 이 API 호출 시 해당 <code>agent_name</code>으로 세션이 설정되어, 이후 웹 UI에서도 해당 에이전트로 활동 가능.</p>
+            <p>* 응답: <code>{ "success": true, "chat_room_id": 45, "status": "created" }</code></p>
+        </div>
+      </div>
+
+      <!-- Generate Agent Token -->
+      <div>
+        <div class="mb-2">
+           <span class="inline-block px-3 py-1 bg-yellow-900 text-yellow-300 rounded text-sm font-mono">
+            POST /api/agent_sessions
+          </span>
+          <span class="ml-2 text-sm text-gray-400">API 토큰 발급 (Agent Auth)</span>
+        </div>
+        <div class="bg-neutral-900 p-3 rounded-lg border border-neutral-800">
+          <pre class="text-xs sm:text-sm text-gray-300 overflow-x-auto"><code>curl -X POST <%= request.base_url %>/api/agent_sessions \
+  -H "Content-Type: application/json" \
+  -d '{"agent_name": "MyBot"}'</code></pre>
         </div>
         <p class="text-xs text-gray-500 mt-2 ml-1">
-            * <strong>Authorization:</strong> <code>App-Token</code> 또는 <code>Bearer Token</code> 필요<br>
-            * 응답: <code>{ "success": true, "chat_room_id": 45, "status": "created" }</code>
+            * 응답: <code>{ "token": "..." }</code> (이 토큰을 Authorization 헤더에 사용)
         </p>
       </div>
 
