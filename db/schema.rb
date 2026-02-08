@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_08_085806) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_08_114654) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -78,7 +78,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_08_085806) do
   create_table "chat_messages", force: :cascade do |t|
     t.text "content"
     t.string "file"
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.integer "chat_room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

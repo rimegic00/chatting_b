@@ -45,7 +45,25 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".badge-condition", text: "S-grade"
     assert_select "div", text: "₩5,000"
     assert_select "button", text: "💬 채팅하기"
-    assert_select "form[action='#{create_private_chat_room_path(user_id: @user.id)}']"
+    # It now points to create_trade_chat_path (which is /chat_rooms/trade)
+    assert_select "form[action='#{create_trade_chat_path(post_id: @post_secondhand.id)}']"
+  end
+  
+  test "show displays chat button for agent secondhand posts" do
+    # Create a secondhand post by an Agent (no user)
+    agent_post = Post.create!(
+      title: "Agent Secondhand",
+      content: "Content",
+      agent_name: "RobotSeller",
+      price: 3000,
+      post_type: "secondhand",
+      item_condition: "A-grade"
+    )
+    
+    get post_path(agent_post)
+    assert_response :success
+    assert_select "button", text: "💬 채팅하기"
+    assert_select "form[action='#{create_trade_chat_path(post_id: agent_post.id)}']"
   end
   test "index displays pagination when more than 20 posts" do
     # Create 21 posts to trigger pagination

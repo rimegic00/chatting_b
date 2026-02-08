@@ -60,7 +60,7 @@
     <div class="text-xs sm:text-sm text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-6"><%= @post.content %></div>
 
     <%# Action Buttons (Link & Chat) %>
-    <% if @post.deal_link.present? || (@post.secondhand? && @post.user.present? && @post.user != current_user) %>
+    <% if @post.deal_link.present? || @post.secondhand? %>
       <div class="flex gap-3 mb-6">
         <%# Deal Link %>
         <% if @post.deal_link.present? %>
@@ -69,9 +69,13 @@
           <% end %>
         <% end %>
 
-        <%# Chat Button (Only for Secondhand & User posts) %>
-        <% if @post.secondhand? && @post.user.present? && @post.user != current_user %>
-           <%= button_to create_private_chat_room_path(user_id: @post.user.id), method: :post, class: "flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg text-center flex items-center justify-center gap-2 transition" do %>
+        <%# Chat Button (For all Seconhand Posts) %>
+        <%# Condition: It is secondhand, and I am NOT the author %>
+        <%# Note: If not logged in, they can still try to chat (will become Guest) or we can force login. For now, we allow clicking. %>
+        <% is_my_post = user_signed_in? && (@post.user == current_user) %> 
+        
+        <% if @post.secondhand? && !is_my_post %>
+           <%= button_to create_trade_chat_path(post_id: @post.id), method: :post, class: "flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg text-center flex items-center justify-center gap-2 transition" do %>
              <span>💬 채팅하기</span>
            <% end %>
         <% end %>

@@ -47,30 +47,58 @@ class ChatRoomsController < ApplicationController
   end
 
   # v3.4: Create trade chat between agents for secondhand posts
+  # v3.8: Updated to support User-to-Agent and User-to-User trade chats
   def create_trade_chat
     @post = Post.find(params[:post_id])
-    buyer_agent_name = params[:buyer_agent_name] || "BuyerAgent_#{SecureRandom.hex(4)}"
+    
+    # Determine Buyer (User or Agent)
+    if user_signed_in?
+      buyer_user = current_user
+      buyer_agent_name = current_user.username.presence || current_user.email.split('@').first
+    else
+      buyer_user = nil
+      buyer_agent_name = params[:buyer_agent_name] || "Guest_#{SecureRandom.hex(4)}"
+    end
+
+    # Determine Seller (User or Agent)
+    seller_user = @post.user
+    seller_agent_name = @post.agent_name.presence || (@post.user&.username || "UnknownSeller")
     
     # Check if a trade chat already exists for this post and buyer
-    @chat_room = ChatRoom.joins(:chat_room_members)
-                         .where(is_private: true)
-                         .where("title LIKE ?", "%#{@post.title}%")
-                         .where(chat_room_members: { agent_name: [buyer_agent_name, @post.agent_name] })
-                         .first
+    # Complex query dropped for simplicity: find by title partial match + buyer member
+    # We will refine the finder logic to be robust
+    
+    query = ChatRoom.joins(:chat_room_members).where(is_private: true).where("title LIKE ?", "%#{@post.title}%")
+    
+    if buyer_user
+      query = query.where(chat_room_members: { user_id: buyer_user.id })
+    else
+      query = query.where(chat_room_members: { agent_name: buyer_agent_name })
+    end
+    
+    @chat_room = query.first
     
     unless @chat_room
       # Create new trade chat room
       @chat_room = ChatRoom.create!(
         title: "중고거래: #{@post.title}",
-        description: "#{@post.agent_name} ↔ #{buyer_agent_name}",
+        description: "#{seller_agent_name} ↔ #{buyer_agent_name}",
         is_private: true
       )
       
-      # Add seller agent
-      @chat_room.chat_room_members.create!(agent_name: @post.agent_name)
+      # Add seller agent/user
+      if seller_user
+         @chat_room.chat_room_members.create!(user: seller_user, agent_name: seller_agent_name)
+      else
+         @chat_room.chat_room_members.create!(agent_name: seller_agent_name)
+      end
       
-      # Add buyer agent
-      @chat_room.chat_room_members.create!(agent_name: buyer_agent_name)
+      # Add buyer agent/user
+      if buyer_user
+        @chat_room.chat_room_members.create!(user: buyer_user, agent_name: buyer_agent_name)
+      else
+        @chat_room.chat_room_members.create!(agent_name: buyer_agent_name)
+      end
       
       # Create initial system message
       @chat_room.chat_messages.create!(
