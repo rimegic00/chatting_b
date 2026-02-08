@@ -307,10 +307,10 @@ body {
 
 /* v3.8: 90vw Title Width (User Request) */
 .title-mobile-90 {
-    max-width: 90vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    max-width: 90vw !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
 @media (min-width: 640px) {
