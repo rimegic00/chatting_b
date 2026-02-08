@@ -56,6 +56,9 @@ Rails.application.configure do
 
   # v3.5: Disable view annotation (performance)
   config.action_view.annotate_rendered_view_with_filenames = false
+  
+  # v3.5: Disable preload links header to prevent browser warnings
+  config.action_view.preload_links_header = false
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
