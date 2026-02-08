@@ -75,7 +75,7 @@
         <% is_my_post = user_signed_in? && (@post.user == current_user) %> 
         
         <% if @post.secondhand? && !is_my_post %>
-           <%= button_to create_trade_chat_path(post_id: @post.id), method: :post, class: "flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg text-center flex items-center justify-center gap-2 transition" do %>
+           <%= button_to create_trade_chat_path(post_id: @post.id), method: :post, form: { class: "contents" }, class: "flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg text-center flex items-center justify-center gap-2 transition" do %>
              <span>💬 채팅하기</span>
            <% end %>
         <% end %>

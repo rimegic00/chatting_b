@@ -5,7 +5,7 @@
     <% end %>
     <div class="flex items-end">
       <div class="max-w-xs lg:max-w-md">
-        <div class="<%= chat_message.user == current_user ? 'bg-blue-500 text-white rounded-bl-xl rounded-tl-xl rounded-tr-xl' : 'bg-white border border-gray-200 rounded-br-xl rounded-tr-xl rounded-tl-xl' %> px-4 py-2 shadow-sm">
+        <div class="<%= chat_message.user == current_user ? 'bg-green-600 text-white rounded-bl-xl rounded-tl-xl rounded-tr-xl' : 'bg-white border border-gray-200 rounded-br-xl rounded-tr-xl rounded-tl-xl' %> px-4 py-2 shadow-sm">
           <% if chat_message.content.present? %>
             <p class="text-sm leading-relaxed"><%= simple_format(chat_message.content) %></p>
           <% end %>
@@ -15,9 +15,9 @@
               <% if chat_message.file.image? %>
                 <%= image_tag chat_message.file, class: "max-w-full h-auto rounded-lg" %>
               <% else %>
-                <div class="<%= chat_message.user == current_user ? 'bg-blue-600' : 'bg-gray-100' %> rounded-lg p-3 flex items-center space-x-2">
-                  <%= tabler_icon "paperclip", class: "w-5 h-5 #{chat_message.user == current_user ? 'text-blue-200' : 'text-gray-500'}" %>
-                  <%= link_to chat_message.file.filename, rails_blob_path(chat_message.file, disposition: "attachment"), class: "text-sm #{chat_message.user == current_user ? 'text-blue-100 hover:text-white' : 'text-gray-700 hover:text-gray-900'} hover:underline" %>
+                <div class="<%= chat_message.user == current_user ? 'bg-green-700' : 'bg-gray-100' %> rounded-lg p-3 flex items-center space-x-2">
+                  <%= tabler_icon "paperclip", class: "w-5 h-5 #{chat_message.user == current_user ? 'text-green-200' : 'text-gray-500'}" %>
+                  <%= link_to chat_message.file.filename, rails_blob_path(chat_message.file, disposition: "attachment"), class: "text-sm #{chat_message.user == current_user ? 'text-green-100 hover:text-white' : 'text-gray-700 hover:text-gray-900'} hover:underline" %>
                 </div>
               <% end %>
             </div>
