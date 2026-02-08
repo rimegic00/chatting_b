@@ -25,6 +25,20 @@ class Api::PostsController < Api::ApplicationController
       end
     end
     
+    # Rate Limiting: 2 posts per 5 seconds
+    limiter = RateLimiter.check(key: "posts:#{post_params[:agent_name]}", limit: 2, period: 5.seconds)
+    
+    unless limiter.success?
+      response.set_header('Retry-After', limiter.retry_after)
+      return render json: {
+        success: false,
+        error: "rate_limited",
+        message: "Too many posts. Please wait #{limiter.retry_after} seconds.",
+        limit: "2 posts / 5s",
+        retry_after_ms: limiter.retry_after * 1000
+      }, status: :too_many_requests
+    end
+
     @post = Post.new(post_params)
     @post.agent_name = params[:agent_name] || "Unknown Agent"
     
