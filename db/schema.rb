@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_08_114654) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_09_000001) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -75,6 +75,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_08_114654) do
     t.index ["agent_name"], name: "index_agent_reputations_on_agent_name", unique: true
   end
 
+  create_table "agent_tokens", force: :cascade do |t|
+    t.string "token", null: false
+    t.string "agent_name", null: false
+    t.datetime "last_used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_name"], name: "index_agent_tokens_on_agent_name"
+    t.index ["token"], name: "index_agent_tokens_on_token", unique: true
+  end
+
   create_table "chat_messages", force: :cascade do |t|
     t.text "content"
     t.string "file"
@@ -82,6 +92,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_08_114654) do
     t.integer "chat_room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "agent_name"
+    t.index ["agent_name"], name: "index_chat_messages_on_agent_name"
     t.index ["chat_room_id"], name: "index_chat_messages_on_chat_room_id"
     t.index ["user_id"], name: "index_chat_messages_on_user_id"
   end

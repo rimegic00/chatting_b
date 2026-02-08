@@ -1,38 +1,55 @@
-<div class="flex <%= chat_message.user == current_user ? 'justify-end' : 'justify-start' %> mb-4">
-  <div class="flex flex-col <%= chat_message.user == current_user ? 'items-end' : 'items-start' %>">
-    <% unless chat_message.user == current_user %>
-      <p class="text-xs font-medium text-gray-600 mb-1"><%= chat_message.user.username || chat_message.user.email %></p>
-    <% end %>
-    <div class="flex items-end">
-      <div class="max-w-xs lg:max-w-md">
-        <div class="<%= chat_message.user == current_user ? 'bg-green-600 text-white rounded-bl-xl rounded-tl-xl rounded-tr-xl' : 'bg-white border border-gray-200 rounded-br-xl rounded-tr-xl rounded-tl-xl' %> px-4 py-2 shadow-sm">
-          <% if chat_message.content.present? %>
-            <p class="text-sm leading-relaxed"><%= simple_format(chat_message.content) %></p>
-          <% end %>
-          
-          <% if chat_message.file.attached? %>
-            <div class="mt-2">
-              <% if chat_message.file.image? %>
-                <%= image_tag chat_message.file, class: "max-w-full h-auto rounded-lg" %>
-              <% else %>
-                <div class="<%= chat_message.user == current_user ? 'bg-green-700' : 'bg-gray-100' %> rounded-lg p-3 flex items-center space-x-2">
-                  <%= tabler_icon "paperclip", class: "w-5 h-5 #{chat_message.user == current_user ? 'text-green-200' : 'text-gray-500'}" %>
-                  <%= link_to chat_message.file.filename, rails_blob_path(chat_message.file, disposition: "attachment"), class: "text-sm #{chat_message.user == current_user ? 'text-green-100 hover:text-white' : 'text-gray-700 hover:text-gray-900'} hover:underline" %>
-                </div>
-              <% end %>
-            </div>
+<% if chat_message.agent_name == "System" %>
+  <!-- System Message -->
+  <div class="flex justify-center mb-4">
+    <div class="bg-gray-100/10 text-gray-400 text-xs px-3 py-1 rounded-full border border-gray-700">
+      <%= chat_message.content %>
+    </div>
+  </div>
+<% else %>
+  <!-- Regular Message -->
+  <div class="flex <%= chat_message.agent_name == current_agent_name ? 'justify-end' : 'justify-start' %> mb-4">
+    <div class="flex flex-col <%= chat_message.agent_name == current_agent_name ? 'items-end' : 'items-start' %>">
+      <% unless chat_message.agent_name == current_agent_name %>
+        <div class="flex items-center space-x-2 mb-1">
+          <% if chat_message.user %>
+             <!-- Human User -->
+             <span class="text-xs font-bold text-blue-600 bg-blue-50 px-1 rounded">Human</span>
+             <span class="text-xs font-medium text-gray-400"><%= chat_message.user.username || chat_message.user.email %></span>
+          <% else %>
+             <!-- AI Agent -->
+             <span class="text-xs font-bold text-purple-500 bg-purple-900/30 px-1 rounded border border-purple-800">AI</span>
+             <span class="text-xs font-medium text-gray-400"><%= chat_message.agent_name %></span>
           <% end %>
         </div>
-      </div>
-      
-      <div class="<%= chat_message.user == current_user ? 'ml-2' : 'mr-2' %>">
-        <p class="text-xs text-gray-500">
-          <%= chat_message.created_at.strftime("%H:%M") %>
-          <% if chat_message.user == current_user %>
-            <span class="ml-1">✓</span>
-          <% end %>
-        </p>
+      <% end %>
+      <div class="flex items-end">
+        <div class="max-w-xs lg:max-w-md">
+          <div class="<%= chat_message.agent_name == current_agent_name ? 'bg-green-600 text-white rounded-bl-xl rounded-tl-xl rounded-tr-xl' : 'bg-gray-800 text-gray-200 border border-gray-700 rounded-br-xl rounded-tr-xl rounded-tl-xl' %> px-4 py-2 shadow-sm">
+            <% if chat_message.content.present? %>
+              <p class="text-sm leading-relaxed"><%= simple_format(chat_message.content) %></p>
+            <% end %>
+            
+            <% if chat_message.file.attached? %>
+              <div class="mt-2">
+                <% if chat_message.file.image? %>
+                  <%= image_tag chat_message.file, class: "max-w-full h-auto rounded-lg" %>
+                <% else %>
+                  <div class="<%= chat_message.agent_name == current_agent_name ? 'bg-green-700' : 'bg-gray-700' %> rounded-lg p-3 flex items-center space-x-2">
+                    <%= tabler_icon "paperclip", class: "w-5 h-5 #{chat_message.agent_name == current_agent_name ? 'text-green-200' : 'text-gray-400'}" %>
+                    <%= link_to chat_message.file.filename, rails_blob_path(chat_message.file, disposition: "attachment"), class: "text-sm #{chat_message.agent_name == current_agent_name ? 'text-green-100 hover:text-white' : 'text-gray-300 hover:text-white'} hover:underline" %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        
+        <div class="<%= chat_message.agent_name == current_agent_name ? 'ml-2' : 'mr-2' %>">
+          <p class="text-[10px] text-gray-500">
+            <%= chat_message.created_at.strftime("%H:%M") %>
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>

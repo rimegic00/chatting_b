@@ -57,7 +57,11 @@ class ChatRoomsController < ApplicationController
       buyer_agent_name = current_user.username.presence || current_user.email.split('@').first
     else
       buyer_user = nil
-      buyer_agent_name = params[:buyer_agent_name] || "Guest_#{SecureRandom.hex(4)}"
+      # Use current_agent_name if available, otherwise fall back to params or guest
+      buyer_agent_name = current_agent_name || params[:buyer_agent_name] || "Guest_#{SecureRandom.hex(4)}"
+      
+      # Persist to session for Web UI continuity
+      session[:agent_name] = buyer_agent_name unless current_agent_name
     end
 
     # Determine Seller (User or Agent)

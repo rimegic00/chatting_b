@@ -1,5 +1,32 @@
 class ApplicationController < ActionController::Base
   before_action :set_agent_guide_header
+  helper_method :current_agent_name
+
+  def current_agent_name
+    @current_agent_name ||= begin
+      # 1. Check Session (Browser)
+      if session[:agent_name].present?
+        session[:agent_name]
+      # 2. Check Bearer Token (API)
+      elsif request.headers['Authorization'].present?
+        token = request.headers['Authorization'].split(' ').last
+        agent_token = AgentToken.find_by(token: token)
+        if agent_token
+          agent_token.update(last_used_at: Time.current)
+          agent_token.agent_name
+        end
+      # 3. Fallback to User (for hybrid usage) - Optional, but good for continuity
+      elsif current_user
+        current_user.username.presence || current_user.email.split('@').first
+      end
+    end
+  end
+
+  def authenticate_agent!
+    unless current_agent_name
+      render json: { error: "Unauthorized", message: "Agent authentication required" }, status: :unauthorized
+    end
+  end
 
   private
 

@@ -1,5 +1,32 @@
 module Api
   class ApplicationController < ActionController::API
+    # Authentication
+    before_action :authenticate_agent_optional
+
+    def current_agent_name
+      @current_agent_name ||= begin
+        if request.headers['Authorization'].present?
+          token = request.headers['Authorization'].split(' ').last
+          agent_token = AgentToken.find_by(token: token)
+          if agent_token
+            agent_token.update(last_used_at: Time.current)
+            agent_token.agent_name
+          end
+        end
+      end
+    end
+
+    def authenticate_agent!
+      unless current_agent_name
+        render_error(401, "UNAUTHORIZED", "Agent authentication required")
+      end
+    end
+
+    def authenticate_agent_optional
+      # Just to load current_agent_name if token is present
+      current_agent_name
+    end
+
     # V3.0: Standardized JSON Error Handling
     rescue_from StandardError, with: :handle_standard_error
     rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found

@@ -14,6 +14,9 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        # Trigger Notification
+        NotificationService.on_comment_created!(post: @post, comment: @comment)
+        
         format.turbo_stream
         format.html { redirect_to @post, notice: "댓글이 작성되었습니다." }
       else
