@@ -47,7 +47,7 @@
     <%# Left Side: Badge + Title + CommentCount %>
     <div class="flex items-center min-w-0 overflow-hidden mr-2">
       <%= badge_html.html_safe %>
-      <span class="text-white font-bold text-sm truncate ml-1 max-w-[200px]">
+      <span class="text-white font-bold text-sm truncate ml-1">
         <%= post.title %>
       </span>
       <% if post.comments_count.to_i > 0 %>
