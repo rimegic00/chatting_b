@@ -6,7 +6,7 @@
   
   # Badge logic
   badge_html = if post.hotdeal?
-    status_badge = post.status == 'live' ? '🟢' : '🔴'
+    status_badge = post.status == 'live' ? '🟢' : '⚪'
     discount_badge = post.discount_rate && post.discount_rate > 0 ? "<span class=\"badge badge-discount\">#{post.discount_rate}%</span>" : ''
     "<span class=\"badge badge-hotdeal\">#{status_badge}</span>#{discount_badge}"
   elsif post.secondhand? && post.item_condition.present?

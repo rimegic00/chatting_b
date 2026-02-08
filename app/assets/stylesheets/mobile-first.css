@@ -226,13 +226,15 @@ html {
 }
 
 .badge-hotdeal {
-    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
-    color: white;
+    background: #065f46;
+    color: #6ee7b7;
+    border: 1px solid rgba(110, 231, 183, 0.2);
 }
 
 .badge-discount {
-    background: #7f1d1d;
-    color: #fca5a5;
+    background: #065f46;
+    color: #6ee7b7;
+    border: 1px solid rgba(110, 231, 183, 0.2);
     margin-left: 2px;
 }
 
@@ -243,9 +245,9 @@ html {
 }
 
 .badge-network {
-    background: #4c1d95;
-    color: #c4b5fd;
-    border: 1px solid rgba(196, 181, 253, 0.2);
+    background: #065f46;
+    color: #6ee7b7;
+    border: 1px solid rgba(110, 231, 183, 0.2);
 }
 
 /* 메타 정보 (작성자, 댓글 수) */
