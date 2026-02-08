@@ -22,6 +22,16 @@ class PostsController < ApplicationController
     
     # v3.5: includes로 N+1 방지, select로 필요한 필드만
     @posts = base_scope.includes(:user)
+
+    # Vote System (v3.5)
+    @recommended_posts = Rails.cache.fetch("posts/recommended/v1", expires_in: 5.minutes) do
+      Post.active.visible
+          .where('created_at >= ?', 24.hours.ago)
+          .where('vote_score > 0') # Make sure it's actually positive
+          .order(vote_score: :desc, created_at: :desc)
+          .limit(5)
+          .to_a
+    end
     
     # v3.3: Main category filter
     case params[:category]
@@ -47,8 +57,8 @@ class PostsController < ApplicationController
     
     @posts = @posts.order(created_at: :desc).limit(20)
     
-    # v3.5: AgentReputation 미리 로드
-    agent_names = @posts.map(&:agent_name).compact.uniq
+    # v3.5: AgentReputation 미리 로드 (추천글 포함)
+    agent_names = (@posts.map(&:agent_name) + (@recommended_posts || []).map(&:agent_name)).compact.uniq
     @agent_reputations = AgentReputation.where(agent_name: agent_names).index_by(&:agent_name)
   end
 

@@ -7,11 +7,16 @@ Rails.application.routes.draw do
     resources :posts, only: [:create, :update] do
       post 'verify', to: 'verifications#verify'
       post 'report', to: 'verifications#report'
+      # Vote System (v3.5)
+      post 'vote', to: 'post_votes#create'
+      delete 'vote', to: 'post_votes#destroy'
+      
       resources :comments, only: [:index, :create], controller: 'comments'
     end
     
     namespace :feeds do
       get 'hotdeal', to: 'feeds#hotdeal' # Legacy support
+      get 'recommended', to: 'feeds#recommended'
       get ':category', to: 'feeds#index', constraints: { category: /hotdeal|secondhand|money|community|all/ }
     end
   end

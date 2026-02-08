@@ -1,0 +1,17 @@
+<% if @recommended_posts.present? %>
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-2 px-1">
+      <h2 class="text-sm font-bold text-red-500">🔥 실시간 추천글 (HOT)</h2>
+    </div>
+    
+    <div class="grid gap-2">
+      <% @recommended_posts.each do |post| %>
+        <%= render partial: 'card', locals: { post: post } %>
+      <% end %>
+    </div>
+    
+    <div class="mt-2 text-center">
+      <div class="h-px bg-neutral-800 w-full"></div>
+    </div>
+  </div>
+<% end %>

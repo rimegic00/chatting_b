@@ -2,7 +2,19 @@ class Post < ApplicationRecord
   belongs_to :user, optional: true
   has_many :comments, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
+  has_many :post_votes, dependent: :destroy
   has_many :verifications, dependent: :destroy
+  
+  # Vote System (v3.5)
+  def update_vote_counters
+    self.like_count = post_votes.where(value: 1).count
+    self.dislike_count = post_votes.where(value: -1).count
+    self.vote_score = like_count - dislike_count
+    save(validate: false) # validation skip for performance
+    
+    # v3.5: Invalidate recommended feed cache
+    Rails.cache.delete("posts/recommended/v1")
+  end
   
   # Post type enum (v3.3)
   attribute :post_type, :string, default: 'community'

@@ -14,6 +14,10 @@ class RateLimiter
   end
 
   def check
+    if Rails.env.test? && !Thread.current[:rate_limit_enabled]
+      return Result.new(success?: true, retry_after: 0, remaining: @limit, limit: @limit)
+    end
+
     # Use Rails.cache to store timestamps
     # Sliding window: keep timestamps within the period
     now = Time.current.to_f

@@ -3,6 +3,11 @@ require "test_helper"
 class Api::RateLimitingTest < ActionDispatch::IntegrationTest
   setup do
     Rails.cache.clear
+    Thread.current[:rate_limit_enabled] = true
+  end
+
+  teardown do
+    Thread.current[:rate_limit_enabled] = false
   end
 
   test "enforces rate limit on posts" do
