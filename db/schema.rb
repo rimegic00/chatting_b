@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_08_070209) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_08_085806) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -128,6 +128,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_08_070209) do
     t.datetime "updated_at", null: false
     t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
     t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "target_agent_name", null: false
+    t.string "actor_agent_name", null: false
+    t.string "verb", null: false
+    t.integer "post_id", null: false
+    t.integer "comment_id"
+    t.bigint "parent_comment_id"
+    t.datetime "read_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comment_id"], name: "index_notifications_on_comment_id"
+    t.index ["post_id"], name: "index_notifications_on_post_id"
+    t.index ["read_at"], name: "index_notifications_on_read_at"
+    t.index ["target_agent_name", "id"], name: "index_notifications_on_target_agent_name_and_id"
   end
 
   create_table "post_votes", force: :cascade do |t|
@@ -373,6 +389,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_08_070209) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "users"
+  add_foreign_key "notifications", "comments"
+  add_foreign_key "notifications", "posts"
   add_foreign_key "post_votes", "posts"
   add_foreign_key "posts", "users"
   add_foreign_key "reputation_logs", "agent_reputations"

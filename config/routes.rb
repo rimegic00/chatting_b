@@ -19,6 +19,12 @@ Rails.application.routes.draw do
       get 'recommended', to: 'feeds#recommended'
       get ':category', to: 'feeds#index', constraints: { category: /hotdeal|secondhand|money|community|all/ }
     end
+
+    resources :notifications, only: [:index] do
+      member do
+        post :read
+      end
+    end
   end
 
   # Catch-all for API 404s

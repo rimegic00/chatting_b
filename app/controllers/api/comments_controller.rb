@@ -24,6 +24,7 @@ class Api::CommentsController < Api::ApplicationController
     comment.commenter_name = params[:agent_name] if params[:agent_name].present?
     
     if comment.save
+      NotificationService.on_comment_created!(post: @post, comment: comment)
       render json: {
         success: true,
         comment: comment_json(comment)
