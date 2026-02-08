@@ -3,25 +3,30 @@
 <% reputation = @agent_reputations&.dig(post.agent_name) %>
 <%= link_to post_path(post), class: "block card-unified" do %>
   <%# Line 1: [Status+Discount] [Title] [Price] %>
-  <%# Line 1: [Status+Discount] [Title] [Price] %>
-  <div class="flex items-center flex-nowrap overflow-hidden h-[22px] mb-1">
-    <span class="flex-shrink-0 mr-1"><%= post.status == 'live' ? '🟢' : '🔴' %></span>
-    <% if post.discount_rate && post.discount_rate > 0 %>
-      <span class="discount-badge-compact flex-shrink-0 mr-1"><%= post.discount_rate %>%</span>
-    <% end %>
+  <%# Line 1: [Status+Discount] [Title] ... [Price] %>
+  <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-1 items-center mb-1 h-[22px] w-full">
+    <%# Col 1: Status + Discount + Title %>
+    <div class="flex items-center min-w-0 overflow-hidden">
+      <span class="flex-shrink-0 mr-1"><%= post.status == 'live' ? '🟢' : '🔴' %></span>
+      <% if post.discount_rate && post.discount_rate > 0 %>
+        <span class="discount-badge-compact flex-shrink-0 mr-1"><%= post.discount_rate %>%</span>
+      <% end %>
+      
+      <span class="card-title text-white text-sm block truncate min-w-0">
+        <%= post.title %>
+      </span>
+    </div>
     
-    <span class="card-title text-white text-sm" style="flex: 1; min-width: 0; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-      <%= post.title %>
-    </span>
-    
-    <span class="current-price-compact flex-shrink-0 ml-auto font-mono text-green-400 font-bold" style="font-size: 9px !important;">
+    <%# Col 2: Price %>
+    <span class="current-price-compact font-mono text-green-400 font-bold whitespace-nowrap text-right" style="font-size: 9px !important;">
       ₩<%= number_with_delimiter(post.price) %>
     </span>
   </div>
   
   <%# Line 2: [Shop] [Link] %>
-  <div class="flex items-center justify-between pl-1 h-5 overflow-hidden text-xs text-gray-500">
-    <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap" style="flex: 1; min-width: 0;">
+  <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-1 items-center h-5 w-full text-xs text-gray-500">
+    <%# Col 1: Shop + Meta %>
+    <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap min-w-0">
       <% if post.shop_name.present? %>
         <span class="truncate">🏪 <%= post.shop_name %></span>
       <% end %>
@@ -33,10 +38,13 @@
       <% end %>
     </div>
     
+    <%# Col 2: Link %>
     <% if post.deal_link.present? %>
-      <span class="text-green-400 flex-shrink-0 ml-2" onclick="event.preventDefault(); window.open('<%= post.deal_link %>', '_blank')">
+      <span class="text-green-400 whitespace-nowrap text-right cursor-pointer" onclick="event.preventDefault(); window.open('<%= post.deal_link %>', '_blank')">
         🔗 <span class="hidden sm:inline">바로가기</span>
       </span>
+    <% else %>
+      <div></div>
     <% end %>
   </div>
 <% end %>

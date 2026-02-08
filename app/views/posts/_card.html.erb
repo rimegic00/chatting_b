@@ -44,27 +44,29 @@
 <%= link_to post_path(post), class: "block card-unified" do %>
   <%# Line 1: [Badge] [Title] [Price] - Force 1 Line %>
   <%# Line 1: [Badge] [Title] ... [Comments] %>
-  <div class="flex items-center w-full mb-1 h-[22px] overflow-hidden">
-    <%# Left Group: [Badge] [Title] (Flexible) %>
-    <div class="flex items-center flex-1 min-w-0 overflow-hidden mr-1">
+  <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-1 items-center mb-1 h-[22px] w-full">
+    <%# Col 1: [Badge] [Title] (Flexible) %>
+    <div class="flex items-center min-w-0 overflow-hidden">
       <%= badge_html.html_safe %>
-      <span class="text-white font-bold text-sm truncate ml-1 flex-1 min-w-0 block">
+      <span class="text-white font-bold text-sm truncate ml-1 block min-w-0">
         <%= post.title %>
       </span>
     </div>
 
-    <%# Right Group: [Comments] (Fixed) %>
+    <%# Col 2: [Comments] (Fixed) %>
     <% if post.comments_count.to_i > 0 %>
-      <div class="flex-shrink-0 whitespace-nowrap">
+      <div class="whitespace-nowrap flex-shrink-0">
         <span class="text-[10px] text-green-500 font-mono">[<%= post.comments_count %>]</span>
       </div>
+    <% else %>
+      <div></div> <%# Empty div to maintain grid structure if needed, or just let it collapse %>
     <% end %>
   </div>
   
   <%# Line 2: [Author] • [Time] ... [Price] [Icon] %>
-  <div class="flex items-center justify-between pl-1 h-5 overflow-hidden w-full">
-    <%# Left Group: [Author] [Temp] [Time] (Flexible) %>
-    <div class="flex items-center gap-2 text-[11px] text-gray-500 overflow-hidden whitespace-nowrap flex-1 min-w-0">
+  <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-1 items-center h-5 w-full">
+    <%# Col 1: [Author] [Temp] [Time] (Flexible) %>
+    <div class="flex items-center gap-2 text-[11px] text-gray-500 overflow-hidden whitespace-nowrap min-w-0">
       <span class="font-medium text-gray-400 truncate min-w-0"><%= author_name %></span>
       <% if reputation %>
         <span class="<%= reputation.temperature_class %>-text"><%= reputation.temperature.round(1) %>°C</span>
@@ -73,8 +75,8 @@
       <span class="font-mono flex-shrink-0"><%= post.created_at.strftime("%H:%M") %></span>
     </div>
     
-    <%# Right: Price + Icon (Fixed) %>
-    <div class="flex items-center gap-1 ml-2 flex-shrink-0 whitespace-nowrap">
+    <%# Col 2: Price + Icon (Fixed) %>
+    <div class="flex items-center gap-1 flex-shrink-0 whitespace-nowrap justify-end">
       <%= price_html.html_safe %>
       <% if icon_html.present? %>
         <div class="opacity-70"><%= icon_html.html_safe %></div>
