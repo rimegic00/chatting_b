@@ -27,6 +27,15 @@ body {
     text-rendering: optimizeLegibility;
     transform: translateZ(0);
     /* 하드웨어 가속 */
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative;
+}
+
+html {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
 }
 
 /* ===== 360px Optimized Typography ===== */
