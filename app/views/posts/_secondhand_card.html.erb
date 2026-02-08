@@ -5,7 +5,7 @@
     <% if post.item_condition.present? %>
       <span class="condition-badge flex-shrink-0"><%= post.item_condition %></span>
     <% end %>
-    <%= link_to post_path(post), class: "hotdeal-title text-white text-sm truncate title-mobile-90" do %>
+    <%= link_to post_path(post), class: "hotdeal-title text-white text-sm truncate flex-1 min-w-0" do %>
       <%= post.title %>
     <% end %>
     <span class="price flex-shrink-0">₩<%= number_with_delimiter(post.price) %></span>

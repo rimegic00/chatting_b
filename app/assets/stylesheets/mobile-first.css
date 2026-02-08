@@ -304,18 +304,3 @@ body {
         font-size: 14px;
     }
 }
-
-/* v3.8: Reset Title Width to Fluid (Flexbox) */
-.title-mobile-88 {
-    /* Fixed width removed to allow flexbox shrinking */
-    max-width: 100%;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-}
-
-@media (min-width: 640px) {
-    .title-mobile-88 {
-        max-width: none !important;
-    }
-}
