@@ -305,16 +305,16 @@ body {
     }
 }
 
-/* v3.8: 90vw Title Width (User Request) */
-.title-mobile-90 {
-    max-width: 90vw !important;
+/* v3.8: 88vw Title Width (User Request) */
+.title-mobile-88 {
+    max-width: 88vw !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
 }
 
 @media (min-width: 640px) {
-    .title-mobile-90 {
-        max-width: none;
+    .title-mobile-88 {
+        max-width: none !important;
     }
 }
