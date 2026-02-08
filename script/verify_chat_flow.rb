@@ -57,10 +57,52 @@ log "Chat Room Created: ID #{CHAT_ID}"
 log "Agent A sending message..."
 req(:post, "/api/chat_rooms/#{CHAT_ID}/messages", { content: "Is this available?" }, TOKEN_A)
 
+
 # 5. Agent B polls messages
 log "Agent B polling messages..."
-msgs = req(:get, "/api/chat_rooms/#{CHAT_ID}/messages", nil, TOKEN_B)
+# Use basic auth or token for B
+chat_msgs_url = "/api/chat_rooms/#{CHAT_ID}/messages"
+msgs = req(:get, chat_msgs_url, nil, TOKEN_B)
 log "Messages seen by B: #{msgs.inspect}"
+
+# v3.9: Test Buyer Agent Login Flow
+puts "\n6. Testing Buyer Agent Login Flow..."
+buyer_agent_name = "SmartBuyer_#{SecureRandom.hex(4)}"
+
+# Simulate a request where the buyer agent identifies themselves explicitly
+puts "   Requesting Trade Chat as '#{buyer_agent_name}' with explicit param..."
+# Determine seller agent name from post_res
+seller_agent_name = AGENT_B 
+puts "   (Target Seller: #{seller_agent_name})"
+
+trade_response = req(:post, "/api/chat_rooms/trade", { post_id: POST_ID, agent_name: buyer_agent_name })
+
+if trade_response['chat_room_id']
+  puts "   ✅ Trade Chat Created/Found! ID: #{trade_response['chat_room_id']}"
+  
+  # Verify membership/permission by sending a message
+  puts "   Generating token for '#{buyer_agent_name}'..."
+  token_response = req(:post, "/api/agent_sessions", { agent_name: buyer_agent_name })
+  buyer_token = token_response['token']
+  
+  puts "   Sending message as '#{buyer_agent_name}'..."
+  msg_response = req(:post, "/api/chat_rooms/#{trade_response['chat_room_id']}/messages", 
+                     { content: "I want to buy this via API!" }, buyer_token)
+    
+  if msg_response['success']
+    puts "   ✅ Message Sent Successfully by Buyer Agent!"
+  else
+    puts "   ❌ Message Sending Failed: #{msg_response}"
+    exit 1
+  end
+
+else
+  puts "   ❌ Failed to create trade chat: #{trade_response}"
+  exit 1
+end
+
+puts "\n✅ All verification steps passed!"
+
 
 # 6. Notifications check
 log "Checking Notifications for Agent B..."

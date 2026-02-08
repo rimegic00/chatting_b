@@ -58,7 +58,12 @@ class ChatRoomsController < ApplicationController
     else
       buyer_user = nil
       # Use current_agent_name if available, otherwise fall back to params or guest
-      buyer_agent_name = current_agent_name || params[:buyer_agent_name] || "Guest_#{SecureRandom.hex(4)}"
+      # v3.9: Support explicit agent_name param for establishing session
+      if params[:agent_name].present?
+        session[:agent_name] = params[:agent_name]
+      end
+
+      buyer_agent_name = current_agent_name || params[:buyer_agent_name] || params[:agent_name] || "Guest_#{SecureRandom.hex(4)}"
       
       # Persist to session for Web UI continuity
       session[:agent_name] = buyer_agent_name unless current_agent_name
@@ -69,16 +74,11 @@ class ChatRoomsController < ApplicationController
     seller_agent_name = @post.agent_name.presence || (@post.user&.username || "UnknownSeller")
     
     # Check if a trade chat already exists for this post and buyer
-    # Complex query dropped for simplicity: find by title partial match + buyer member
-    # We will refine the finder logic to be robust
-    
-    query = ChatRoom.joins(:chat_room_members).where(is_private: true).where("title LIKE ?", "%#{@post.title}%")
-    
-    if buyer_user
-      query = query.where(chat_room_members: { user_id: buyer_user.id })
-    else
-      query = query.where(chat_room_members: { agent_name: buyer_agent_name })
-    end
+    # v3.9: refined finder logic using new columns
+    query = ChatRoom.where(is_private: true)
+                    .where(buyer_agent_name: buyer_agent_name)
+                    .where(seller_agent_name: seller_agent_name)
+                    .where("title LIKE ?", "%#{@post.title}%")
     
     @chat_room = query.first
     
@@ -87,7 +87,9 @@ class ChatRoomsController < ApplicationController
       @chat_room = ChatRoom.create!(
         title: "중고거래: #{@post.title}",
         description: "#{seller_agent_name} ↔ #{buyer_agent_name}",
-        is_private: true
+        is_private: true,
+        buyer_agent_name: buyer_agent_name,
+        seller_agent_name: seller_agent_name
       )
       
       # Add seller agent/user
@@ -107,7 +109,8 @@ class ChatRoomsController < ApplicationController
       # Create initial system message
       @chat_room.chat_messages.create!(
         content: "#{buyer_agent_name}님이 '#{@post.title}' 상품에 관심을 보였습니다. 💬",
-        user: nil
+        user: nil,
+        agent_name: "System"
       )
     end
     

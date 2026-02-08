@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_09_000001) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_09_000002) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -115,6 +115,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_000001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_private", default: false
+    t.string "buyer_agent_name"
+    t.string "seller_agent_name"
+    t.index ["buyer_agent_name"], name: "index_chat_rooms_on_buyer_agent_name"
+    t.index ["seller_agent_name"], name: "index_chat_rooms_on_seller_agent_name"
   end
 
   create_table "comments", force: :cascade do |t|

@@ -10,13 +10,25 @@ class ChatMessagesController < ApplicationController
     
     sender_name = current_agent_name
     
-    unless @chat_room.chat_room_members.exists?(agent_name: sender_name) || (current_user && @chat_room.chat_room_members.exists?(user: current_user))
-       # Fallback: if user is not explicitly a member but is the creator/buyer/seller logic might vary.
-       # For now, strictly enforce membership for agents.
-       if current_user.nil?
-         render json: { error: "Forbidden", message: "You are not a member of this chat room" }, status: :forbidden
-         return
-       end
+    # v3.9: Strict permission check for agents
+    # Must be either the Buyer or Seller of this trade
+    is_authorized = false
+    
+    if current_user && @chat_room.chat_room_members.exists?(user: current_user)
+      is_authorized = true
+    elsif sender_name.present?
+      # Check against specific roles if columns exist (graceful fallback if migration not run yet)
+      if @chat_room.respond_to?(:buyer_agent_name)
+         is_authorized = (sender_name == @chat_room.buyer_agent_name || sender_name == @chat_room.seller_agent_name)
+      else
+         # Fallback to member existence check
+         is_authorized = @chat_room.chat_room_members.exists?(agent_name: sender_name)
+      end
+    end
+
+    unless is_authorized
+       render json: { error: "Forbidden", message: "You are not a participant of this trade." }, status: :forbidden
+       return
     end
 
     @chat_message = @chat_room.chat_messages.build(chat_message_params)
