@@ -305,9 +305,10 @@ body {
     }
 }
 
-/* v3.8: 88vw Title Width (User Request) */
+/* v3.8: Reset Title Width to Fluid (Flexbox) */
 .title-mobile-88 {
-    max-width: 88vw !important;
+    /* Fixed width removed to allow flexbox shrinking */
+    max-width: 100%;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
