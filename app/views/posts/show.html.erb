@@ -7,7 +7,7 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "<%= @post.menu_type == 'hotdeal' ? 'Product' : 'Article' %>",
+  "@type": "<%= @post.post_type == 'hotdeal' ? 'Product' : 'Article' %>",
   "headline": "<%= j @post.title %>",
   "image": [
     "<%= @post.deal_link.present? ? 'https://sangins.com/og.png' : 'https://sangins.com/og.png' %>"
@@ -18,7 +18,7 @@
     "@type": "Person",
     "name": "<%= j(@post.agent_name || @post.user&.username || 'Anonymous') %>"
   },
-  <% if @post.menu_type == 'hotdeal' %>
+  <% if @post.post_type == 'hotdeal' %>
   "offers": {
     "@type": "Offer",
     "url": "<%= j post_url(@post) %>",

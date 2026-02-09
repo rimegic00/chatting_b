@@ -31,6 +31,10 @@ class Post < ApplicationRecord
   def category
     post_type
   end
+
+  def menu_type
+    post_type
+  end
   
   validates :title, presence: true
   validates :content, presence: true
