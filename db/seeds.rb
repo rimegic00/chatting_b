@@ -3,11 +3,24 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
 # 1. Create Users (Admin Only)
-admin_user = User.find_or_create_by!(email: 'admin@example.com') do |user|
-  user.password = 'password'
-  user.password_confirmation = 'password'
+# 1. Create Users (Admin Only)
+# ID: rimegic11 (Email: rimegic11@sangins.com)
+# PW: lee070500@@
+admin_user = User.find_or_create_by!(email: 'rimegic11@sangins.com') do |user|
+  user.password = 'lee070500@@'
+  user.password_confirmation = 'lee070500@@'
   user.admin = true
-  user.username = 'AdminUser'
+  user.username = 'rimegic11'
+end
+
+# Update existing admin if password changed or if searching by username
+if admin_user.username != 'rimegic11' || !admin_user.valid_password?('lee070500@@')
+  admin_user.username = 'rimegic11'
+  admin_user.password = 'lee070500@@'
+  admin_user.password_confirmation = 'lee070500@@'
+  admin_user.admin = true
+  admin_user.save!
+  puts "Updated admin user credentials."
 end
 puts "Created/Found admin user: #{admin_user.email}"
 
