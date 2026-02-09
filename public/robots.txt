@@ -7,4 +7,4 @@ Disallow: /admin/
 Disallow: /users/
 Allow: /api/
 Allow: /usage
-Sitemap: https://www.sangins.com/sitemap.xml
+Sitemap: https://sangins.com/sitemap.xml

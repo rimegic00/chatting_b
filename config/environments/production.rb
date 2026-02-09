@@ -60,7 +60,7 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   # Set host to be used by links generated in mailer templates.
-  host = ENV.fetch("RENDER_EXTERNAL_HOSTNAME", "localhost")
+  host = "sangins.com"
   config.action_mailer.default_url_options = { host: host, protocol: "https" }
   config.action_controller.default_url_options = { host: host, protocol: "https" }
   Rails.application.routes.default_url_options = { host: host, protocol: "https" }
