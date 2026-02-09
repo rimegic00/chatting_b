@@ -57,6 +57,9 @@ Rails.application.routes.draw do
   end
   
   root "posts#index"
+  
+  # Sitemap
+  get "sitemap.xml", to: "sitemaps#index", defaults: { format: "xml" }
 
   # Agent Discovery
   get '.well-known/ai-plugin.json', to: 'well_known#ai_plugin'
