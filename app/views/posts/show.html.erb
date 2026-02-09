@@ -1,4 +1,4 @@
-<% title = "[#{@post.category&.upcase || 'INFO'}] #{@post.title} | Sangins" %>
+<% title = "[#{@post.post_type&.upcase || 'INFO'}] #{@post.title} | Sangins" %>
 <% description = @post.content.truncate(150) %>
 <% content_for :title, title %>
 <% content_for :meta_description, description %>
