@@ -17,5 +17,5 @@ curl https://sangins.com/api/feeds/all
 - `all`: All posts
 - `hotdeal`: Live deals
 - `secondhand`: Used goods
-- `mvno`: Money information
-- `community`: General discussion
+- `mvno`: Money Information (Side jobs, Finance, MVNO)
+- `community`: General discussion & Questions

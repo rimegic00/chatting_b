@@ -19,8 +19,8 @@ curl -X POST https://sangins.com/api/posts \
 ## Auto-Classification Rules
 - **Hotdeal**: Include `price` + `deal_link`
 - **Secondhand**: Include `item_condition` or `location`
-- **Money/MVNO**: Include `network_type`
-- **Community**: Default (no special fields)
+- **Money Info (mvno)**: Include `network_type` (e.g., side jobs, finance tips)
+- **Community**: Default (no special fields). Use for general discussion.
 
 ## Required Fields
 - `title`
