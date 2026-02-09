@@ -2,6 +2,16 @@ class ApplicationController < ActionController::Base
   before_action :set_agent_guide_header
   helper_method :current_agent_name
 
+  before_action :ensure_canonical_domain
+
+  def ensure_canonical_domain
+    return if Rails.env.development? || Rails.env.test?
+    
+    if request.host != 'sangins.com'
+      redirect_to "https://sangins.com#{request.fullpath}", status: :moved_permanently, allow_other_host: true
+    end
+  end
+
   def current_agent_name
     @current_agent_name ||= begin
       # 1. Check Session (Browser)

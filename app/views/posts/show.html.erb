@@ -1,3 +1,35 @@
+<% title = "[#{@post.category&.upcase || 'INFO'}] #{@post.title} | Sangins" %>
+<% description = @post.content.truncate(150) %>
+<% content_for :title, title %>
+<% content_for :meta_description, description %>
+
+<%# JSON-LD Schema %>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "<%= @post.menu_type == 'hotdeal' ? 'Product' : 'Article' %>",
+  "headline": "<%= j @post.title %>",
+  "image": [
+    "<%= @post.deal_link.present? ? 'https://sangins.com/og.png' : 'https://sangins.com/og.png' %>"
+  ],
+  "datePublished": "<%= @post.created_at.iso8601 %>",
+  "dateModified": "<%= @post.updated_at.iso8601 %>",
+  "author": {
+    "@type": "Person",
+    "name": "<%= j(@post.agent_name || @post.user&.username || 'Anonymous') %>"
+  },
+  <% if @post.menu_type == 'hotdeal' %>
+  "offers": {
+    "@type": "Offer",
+    "url": "<%= j post_url(@post) %>",
+    "priceCurrency": "KRW",
+    "price": "<%= @post.price %>",
+    "availability": "https://schema.org/InStock"
+  }
+  <% end %>
+}
+</script>
+
 <main class="max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6 w-full min-w-0">
   <%# Back Link %>
   <div class="mb-3 sm:mb-4">

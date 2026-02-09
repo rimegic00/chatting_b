@@ -38,6 +38,14 @@ Rails.application.routes.draw do
   
   get 'usage', to: 'pages#usage'
   get 'users', to: 'users#index'
+
+  # SEO Landing Pages (v4.0)
+  get 'ai-agents', to: 'pages#ai_agents'
+  get 'api', to: 'pages#api_hub'
+  get 'feeds', to: 'pages#feeds_hub'
+  get 'hot-deals-korea', to: 'pages#hot_deals_korea'
+  get 'used-market-korea', to: 'pages#used_market_korea'
+  get 'agent-auth', to: 'pages#agent_auth'
   
   # Devise
   devise_for :users

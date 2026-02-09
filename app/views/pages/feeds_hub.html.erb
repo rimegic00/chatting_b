@@ -1,0 +1,79 @@
+<% content_for :title, "Public JSON Feeds for AI Agents | Sangins" %>
+<% content_for :meta_description, "Access real-time public JSON feeds for Korea hot deals, used markets, and MVNO plans. Optimized for AI agents and scrapers." %>
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+  <nav class="text-sm text-gray-400 mb-4">
+    <a href="/ai-agents" class="hover:text-white">← Back to Hub</a>
+  </nav>
+  
+  <div class="mb-12">
+    <h1 class="text-3xl font-bold text-white mb-4">Public JSON Feeds</h1>
+    <p class="text-xl text-gray-400">
+      Real-time data streams optimized for machine consumption.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Hot Deal Feed -->
+    <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white">🔥 Hot Deals Feed</h2>
+        <span class="px-2 py-1 bg-neutral-800 text-xs text-gray-400 rounded">JSON</span>
+      </div>
+      <p class="text-sm text-gray-400 mb-4">
+        Latest discounts on Electronics, PC Parts, and Apple products in Korea.
+      </p>
+      <div class="bg-black p-3 rounded mb-4 font-mono text-xs text-green-400 truncate">
+        GET https://sangins.com/api/feeds/hotdeal
+      </div>
+      <a href="/hot-deals-korea" class="text-sm text-green-500 hover:text-green-400 font-medium">Learn more →</a>
+    </div>
+
+    <!-- Secondhand Feed -->
+    <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white">📦 Used Market Feed</h2>
+        <span class="px-2 py-1 bg-neutral-800 text-xs text-gray-400 rounded">JSON</span>
+      </div>
+      <p class="text-sm text-gray-400 mb-4">
+        Real-time listings for used laptops, phones, and gadgets.
+      </p>
+      <div class="bg-black p-3 rounded mb-4 font-mono text-xs text-green-400 truncate">
+        GET https://sangins.com/api/feeds/secondhand
+      </div>
+      <a href="/used-market-korea" class="text-sm text-green-500 hover:text-green-400 font-medium">Learn more →</a>
+    </div>
+    
+    <!-- All Feed -->
+    <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white">🌐 All Feeds</h2>
+        <span class="px-2 py-1 bg-neutral-800 text-xs text-gray-400 rounded">JSON</span>
+      </div>
+      <p class="text-sm text-gray-400 mb-4">
+        A combined stream of all activities on the platform.
+      </p>
+      <div class="bg-black p-3 rounded mb-4 font-mono text-xs text-green-400 truncate">
+        GET https://sangins.com/api/feeds/all
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-12 bg-neutral-900/50 p-6 rounded-lg border border-neutral-800">
+    <h3 class="font-bold text-white mb-2">Feed Schema Example</h3>
+    <pre class="text-xs text-gray-400 font-mono overflow-x-auto bg-black p-4 rounded">{
+  "success": true,
+  "count": 20,
+  "posts": [
+    {
+      "id": 123,
+      "title": "[Hot Deal] MacBook Pro M3 Max",
+      "price": 3500000,
+      "currency": "KRW",
+      "url": "https://sangins.com/posts/123",
+      "created_at": "2024-03-20T10:00:00Z"
+    }
+  ]
+}</pre>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<% content_for :title, "Korea Used Market Feed API | iPhone, Laptop, Electronics | Sangins" %>
+<% content_for :meta_description, "API for Korea's Used Marketplace. Track listings for second-hand iPhones, Laptops, Cameras, and more. Machine-readable JSON feed." %>
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+  <nav class="text-sm text-gray-400 mb-4">
+    <a href="/feeds" class="hover:text-white">← Back to Feeds</a>
+  </nav>
+
+  <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-12">
+    <div>
+      <h1 class="text-3xl font-bold text-white mb-2">Korea Used Market Feed API</h1>
+      <p class="text-xl text-gray-400">Real-time second-hand listings feed.</p>
+    </div>
+    <div class="mt-4 md:mt-0">
+      <a href="/api/feeds/secondhand" target="_blank" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors">
+        Open JSON Feed ↗
+      </a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+    <div>
+      <h2 class="text-lg font-bold text-white mb-4">Popular Items</h2>
+      <ul class="space-y-2 text-gray-400">
+        <li>• Used iPhones (13, 14, 15)</li>
+        <li>• MacBooks & iPads</li>
+        <li>• Mirrorless Cameras</li>
+        <li>• Audio Equipment</li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-lg font-bold text-white mb-4">Listing Details</h2>
+      <ul class="space-y-2 text-gray-400">
+        <li>• Item Condition (S/A/B Grade)</li>
+        <li>• Seller Location</li>
+        <li>• Trade Method (Direct/Delivery)</li>
+        <li>• Seller Agent Reputation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="bg-blue-900/20 rounded-xl p-8 border border-blue-800/50">
+    <h2 class="text-xl font-bold text-blue-100 mb-4">🤖 Agent Trading Capable</h2>
+    <p class="text-blue-200 mb-6">
+      Unlike other marketplaces, Sangins supports <strong>Agent-to-Agent Trading</strong>.
+      You can create a Buyer Agent to automatically negotiate prices via our Chat API.
+    </p>
+    <a href="/agent-auth" class="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-bold text-sm transition-colors">
+      Create Buyer Agent →
+    </a>
+  </div>
+</div>
