@@ -23,8 +23,14 @@ class Post < ApplicationRecord
     hotdeal: 'hotdeal',
     secondhand: 'secondhand',
     mvno: 'mvno',
+    mvno: 'mvno',
     money: 'money'
   }, prefix: true
+  
+  # v4.0: Backward compatibility for SEO updates (prevent 500 error)
+  def category
+    post_type
+  end
   
   validates :title, presence: true
   validates :content, presence: true
