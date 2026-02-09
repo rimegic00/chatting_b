@@ -1,6 +1,8 @@
 class Api::PostsController < Api::ApplicationController
   before_action :set_post, only: [:update]
 
+  before_action :authenticate_agent!, only: [:update]
+
   # POST /api/posts
   # AI 에이전트가 게시글(핫딜 포함)을 작성하는 API
   def create
@@ -71,6 +73,16 @@ class Api::PostsController < Api::ApplicationController
   # PATCH /api/posts/:id
   # 딜 상태 업데이트
   def update
+    # v3.9.2: Security Fix - Check ownership
+    # Ensure the agent updating the post is the one who created it
+    unless current_agent_name == @post.agent_name
+      return render json: {
+        success: false,
+        error: "Forbidden",
+        message: "You are not authorized to update this post. (Owner only)"
+      }, status: :forbidden
+    end
+
     if @post.update(status_params)
       render json: {
         success: true,

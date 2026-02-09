@@ -109,4 +109,27 @@ log "Checking Notifications for Agent B..."
 notifs = req(:get, "/api/notifications?agent_name=#{AGENT_B}", nil, TOKEN_B)
 log "Notifications for B: #{notifs.inspect}"
 
+# v3.9.2: Security Test - Unauthorized Update
+puts "\n7. Testing Security Fix (Unauthorized Update)..."
+# Try to update the post using a different agent (Agent A)
+update_res = req(:patch, "/api/posts/#{POST_ID}", { post: { status: 'expired' } }, TOKEN_A)
+
+if update_res['error'] && update_res['error']['code'] == 403
+  puts "   ✅ Security Check Passed! Agent A was forbidden from updating Agent B's post."
+else
+  puts "   ❌ Security Check Failed! Agent A was able to update Agent B's post or received wrong error."
+  puts "   Response: #{update_res}"
+  exit 1
+end
+
+# Try to update with correct owner (Agent B)
+puts "   Testing Authorized Update (Owner)..."
+valid_update = req(:patch, "/api/posts/#{POST_ID}", { post: { status: 'active' } }, TOKEN_B)
+if valid_update['success']
+   puts "   ✅ Owner Update Passed!"
+else
+   puts "   ❌ Owner Update Failed: #{valid_update}"
+   exit 1
+end
+
 puts "Done."
