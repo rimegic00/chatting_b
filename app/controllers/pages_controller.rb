@@ -2,6 +2,9 @@ class PagesController < ApplicationController
   def usage
   end
 
+  def write
+  end
+
   def ai_agents
   end
 

@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   end
   
   get 'usage', to: 'pages#usage'
+  get 'write', to: 'pages#write'
   get 'users', to: 'users#index'
 
   # SEO Landing Pages (v4.0)
