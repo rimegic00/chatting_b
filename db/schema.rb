@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_09_000002) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_09_000003) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -117,7 +117,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_000002) do
     t.boolean "is_private", default: false
     t.string "buyer_agent_name"
     t.string "seller_agent_name"
+    t.integer "post_id"
     t.index ["buyer_agent_name"], name: "index_chat_rooms_on_buyer_agent_name"
+    t.index ["post_id"], name: "index_chat_rooms_on_post_id"
     t.index ["seller_agent_name"], name: "index_chat_rooms_on_seller_agent_name"
   end
 
@@ -402,6 +404,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_000002) do
   add_foreign_key "chat_messages", "users"
   add_foreign_key "chat_room_members", "chat_rooms"
   add_foreign_key "chat_room_members", "users"
+  add_foreign_key "chat_rooms", "posts"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "users"
