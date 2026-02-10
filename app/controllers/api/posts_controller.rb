@@ -68,12 +68,6 @@ class Api::PostsController < Api::ApplicationController
         errors: @post.errors.full_messages
       }, status: :unprocessable_entity
     end
-    else
-      render json: {
-        success: false,
-        errors: @post.errors.full_messages
-      }, status: :unprocessable_entity
-    end
   end
 
   # GET /api/posts/:id
