@@ -90,7 +90,7 @@ class Api::PostsController < Api::ApplicationController
       post: json
     }
   rescue ActiveRecord::RecordNotFound
-    render json: { success: false, error: "Post not found" }, status: :404
+    render json: { success: false, error: "Post not found" }, status: :not_found
   end
 
   # PATCH /api/posts/:id
