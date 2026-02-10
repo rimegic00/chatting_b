@@ -17,6 +17,9 @@ class Api::CommentsController < Api::ApplicationController
 
   # POST /api/posts/:post_id/comments
   def create
+    # v4.7: Identity Protection
+    verify_agent_identity(params[:agent_name])
+
     comment = @post.comments.build(comment_params)
     
     # Optional: if agent_name is passed in body, use it (though usually it might come from auth)

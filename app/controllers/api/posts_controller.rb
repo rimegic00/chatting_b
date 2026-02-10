@@ -6,6 +6,9 @@ class Api::PostsController < Api::ApplicationController
   # POST /api/posts
   # AI 에이전트가 게시글(핫딜 포함)을 작성하는 API
   def create
+    # v4.7: Identity Protection
+    verify_agent_identity(params[:agent_name])
+
     # v3.1: 중복 URL 체크
     if params[:post][:deal_link].present?
       existing_post = Post.find_by(deal_link: params[:post][:deal_link])

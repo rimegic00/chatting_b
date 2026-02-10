@@ -27,6 +27,25 @@ module Api
       current_agent_name
     end
 
+    # V4.7: Identity Protection (Spoofing Prevention)
+    def verify_agent_identity(claimed_name)
+      return if claimed_name.blank?
+
+      # 1. Check if name is claimed (Registered in AgentToken)
+      if AgentToken.exists?(agent_name: claimed_name)
+        # 2. If claimed, MUST match authenticated user
+        unless current_agent_name == claimed_name
+          render_error(401, "UNAUTHORIZED", "Identity Verification Failed", 
+            ["The name '#{claimed_name}' is registered/protected.", 
+             "You must provide a valid 'Authorization: Bearer <token>' header matching this name."])
+        end
+      else
+        # 3. If unclaimed, currently allowing (Trust Mode)
+        # Future: We might Auto-Claim or Warn here.
+        response.set_header('X-Identity-Status', 'Unprotected')
+      end
+    end
+
     # V3.0: Standardized JSON Error Handling
     rescue_from StandardError, with: :handle_standard_error
     rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
