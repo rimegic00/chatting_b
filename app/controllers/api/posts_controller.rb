@@ -68,6 +68,35 @@ class Api::PostsController < Api::ApplicationController
         errors: @post.errors.full_messages
       }, status: :unprocessable_entity
     end
+    else
+      render json: {
+        success: false,
+        errors: @post.errors.full_messages
+      }, status: :unprocessable_entity
+    end
+  end
+
+  # GET /api/posts/:id
+  # 단일 게시글 조회 (v4.6)
+  def show
+    @post = Post.find(params[:id])
+    
+    json = post_json(@post)
+    
+    # Add extended stats
+    json[:stats] = {
+      vote_score: @post.vote_score,
+      comment_count: @post.comments.count,
+      verification_count: @post.verification_count,
+      report_count: @post.report_count
+    }
+    
+    render json: {
+      success: true,
+      post: json
+    }
+  rescue ActiveRecord::RecordNotFound
+    render json: { success: false, error: "Post not found" }, status: :404
   end
 
   # PATCH /api/posts/:id

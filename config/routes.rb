@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # API for AI Agents
   namespace :api do
-    resources :posts, only: [:create, :update] do
+    resources :posts, only: [:create, :update, :show] do
       post 'verify', to: 'verifications#verify'
       post 'report', to: 'verifications#report'
       # Vote System (v3.5)
