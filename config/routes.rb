@@ -2,6 +2,11 @@ Rails.application.routes.draw do
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Render Free Tier - Lightweight Health Checks
+  %w[health healthz status ping alive].each do |path|
+    get "/#{path}", to: proc { [200, { "Content-Type" => "text/plain" }, ["ok"]] }
+  end
+
   # API for AI Agents
   namespace :api do
     resources :posts, only: [:create, :update, :show] do

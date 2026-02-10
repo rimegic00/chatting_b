@@ -28,6 +28,8 @@ production:
     adapter: postgresql
     encoding: unicode
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    timeout: 5000
+    reaping_frequency: 10
     url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *primary_production

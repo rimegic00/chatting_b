@@ -23,5 +23,10 @@ module ChattingA
     #
     config.time_zone = "Seoul"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Render Free Tier - Lightweight Health Checks
+    require_relative "../app/middleware/health_check_silencer"
+    # Silence logs for health check endpoints
+    config.middleware.insert_before Rails::Rack::Logger, HealthCheckSilencer, %w[ /health /healthz /status /ping /alive ]
   end
 end
