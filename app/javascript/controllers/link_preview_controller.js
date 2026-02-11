@@ -5,17 +5,10 @@ export default class extends Controller {
     static values = { dealLink: String }
 
     connect() {
-        console.log('Link Preview Controller connected')
-        try {
-            this.processLinkPreview()
-        } catch (error) {
-            console.error('Link Preview Error:', error)
-        }
+        this.processLinkPreview()
     }
 
     processLinkPreview() {
-        console.log('Processing link preview...')
-
         // Priority 1: deal_link field
         let url = this.dealLinkValue && this.dealLinkValue.trim() !== '' ? this.dealLinkValue : null
 
@@ -25,12 +18,7 @@ export default class extends Controller {
             url = this.extractUrl(content)
         }
 
-        console.log('Extracted URL:', url)
-
-        if (!url) {
-            console.log('No URL found in deal_link or content')
-            return
-        }
+        if (!url) return
 
         const cacheKey = `lp:${this.hashUrl(url)}`
         const cachedData = this.getValidCache(cacheKey)
@@ -111,15 +99,13 @@ export default class extends Controller {
         const { title, description, image, url, site_name } = data
         const domain = new URL(url).hostname
 
-        console.log('Rendering card with data:', { title, description, image, url, site_name })
-
         // Construct HTML safely
         const cardHtml = `
       <a href="${url}" target="_blank" rel="noopener noreferrer nofollow" class="block mt-4 mb-6 group">
         <div class="bg-neutral-800 border border-neutral-700 rounded-lg overflow-hidden hover:border-neutral-600 transition-colors">
           ${image ? `
             <div class="aspect-video w-full overflow-hidden bg-neutral-900 relative">
-               <img src="${image}" alt="" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="console.error('Image failed to load:', this.src); this.style.display='none'">
+               <img src="${image}" alt="" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.style.display='none'">
             </div>
           ` : '<div class="p-2 text-xs text-gray-500 text-center">No image available</div>'}
           <div class="p-3 sm:p-4">
