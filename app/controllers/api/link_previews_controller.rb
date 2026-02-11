@@ -22,10 +22,14 @@ module Api
         if response.is_a?(Net::HTTPSuccess)
           data = JSON.parse(response.body)
           # Minimize payload: only return what we need
+          # Handle both image formats: {"image": {"url": "..."}} or {"image": "..."}
+          image_data = data.dig('data', 'image')
+          image_url = image_data.is_a?(Hash) ? image_data['url'] : image_data
+          
           payload = {
             title: data.dig('data', 'title'),
             description: data.dig('data', 'description'),
-            image: data.dig('data', 'image', 'url'),
+            image: image_url,
             url: data.dig('data', 'url'),
             site_name: data.dig('data', 'publisher')
           }
