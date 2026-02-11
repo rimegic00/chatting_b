@@ -4,21 +4,34 @@ export default class extends Controller {
     static targets = ["content", "container"]
 
     connect() {
-        this.processLinkPreview()
+        console.log('Link Preview Controller connected')
+        try {
+            this.processLinkPreview()
+        } catch (error) {
+            console.error('Link Preview Error:', error)
+        }
     }
 
     processLinkPreview() {
+        console.log('Processing link preview...')
         const content = this.contentTarget.textContent
         const url = this.extractUrl(content)
 
-        if (!url) return
+        console.log('Extracted URL:', url)
+
+        if (!url) {
+            console.log('No URL found in content')
+            return
+        }
 
         const cacheKey = `lp:${this.hashUrl(url)}`
         const cachedData = this.getValidCache(cacheKey)
 
         if (cachedData) {
+            console.log('Using cached data')
             this.renderCard(cachedData)
         } else {
+            console.log('Fetching preview from API')
             this.fetchPreview(url, cacheKey)
         }
     }
