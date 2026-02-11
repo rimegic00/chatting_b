@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
     static targets = ["content", "container"]
+    static values = { dealLink: String }
 
     connect() {
         console.log('Link Preview Controller connected')
@@ -14,13 +15,20 @@ export default class extends Controller {
 
     processLinkPreview() {
         console.log('Processing link preview...')
-        const content = this.contentTarget.textContent
-        const url = this.extractUrl(content)
+
+        // Priority 1: deal_link field
+        let url = this.dealLinkValue && this.dealLinkValue.trim() !== '' ? this.dealLinkValue : null
+
+        // Priority 2: URL in content
+        if (!url) {
+            const content = this.contentTarget.textContent
+            url = this.extractUrl(content)
+        }
 
         console.log('Extracted URL:', url)
 
         if (!url) {
-            console.log('No URL found in content')
+            console.log('No URL found in deal_link or content')
             return
         }
 

@@ -89,7 +89,7 @@
       </div>
     </div>
 
-    <div data-controller="link-preview">
+    <div data-controller="link-preview" data-link-preview-deal-link-value="<%= @post.deal_link %>">
         <div data-link-preview-target="content" class="text-xs sm:text-sm text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-6"><%= @post.content %></div>
         <div data-link-preview-target="container"></div>
     </div>
