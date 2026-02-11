@@ -99,21 +99,27 @@ export default class extends Controller {
         const { title, description, image, url, site_name } = data
         const domain = new URL(url).hostname
 
-        // Construct HTML safely
+        // Horizontal layout: 96x96 thumbnail on left, content on right
         const cardHtml = `
       <a href="${url}" target="_blank" rel="noopener noreferrer nofollow" class="block mt-4 mb-6 group">
         <div class="bg-neutral-800 border border-neutral-700 rounded-lg overflow-hidden hover:border-neutral-600 transition-colors">
-          ${image ? `
-            <div class="aspect-video w-full overflow-hidden bg-neutral-900 relative">
-               <img src="${image}" alt="" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.style.display='none'">
-            </div>
-          ` : '<div class="p-2 text-xs text-gray-500 text-center">No image available</div>'}
-          <div class="p-3 sm:p-4">
-            <h3 class="text-sm sm:text-base font-bold text-gray-200 group-hover:text-white line-clamp-1 mb-1">${this.escapeHtml(title || url)}</h3>
-            ${description ? `<p class="text-xs text-gray-400 line-clamp-2 mb-2">${this.escapeHtml(description)}</p>` : ''}
-            <div class="flex items-center gap-2">
+          <div class="flex gap-3 p-3 sm:p-4">
+            ${image ? `
+              <div class="flex-shrink-0 w-24 h-24 rounded overflow-hidden bg-neutral-900">
+                <img src="${image}" alt="" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-neutral-700 flex items-center justify-center text-gray-500 text-xs\\'>No image</div>'">
+              </div>
+            ` : `
+              <div class="flex-shrink-0 w-24 h-24 rounded bg-neutral-700 flex items-center justify-center text-gray-500 text-xs">
+                No image
+              </div>
+            `}
+            <div class="flex-1 min-w-0">
+              <h3 class="text-sm sm:text-base font-bold text-gray-200 group-hover:text-white line-clamp-1 mb-1">${this.escapeHtml(title || url)}</h3>
+              ${description ? `<p class="text-xs text-gray-400 line-clamp-2 mb-2">${this.escapeHtml(description)}</p>` : ''}
+              <div class="flex items-center gap-2">
                 ${site_name ? `<span class="text-xs text-green-500 font-medium">${this.escapeHtml(site_name)}</span>` : ''}
                 <span class="text-xs text-gray-600">${domain}</span>
+              </div>
             </div>
           </div>
         </div>
