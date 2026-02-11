@@ -89,7 +89,10 @@
       </div>
     </div>
 
-    <div class="text-xs sm:text-sm text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-6"><%= @post.content %></div>
+    <div data-controller="link-preview">
+        <div data-link-preview-target="content" class="text-xs sm:text-sm text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-6"><%= @post.content %></div>
+        <div data-link-preview-target="container"></div>
+    </div>
 
     <%# Action Buttons (Link & Chat) %>
     <% if @post.deal_link.present? || @post.secondhand? %>

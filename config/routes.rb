@@ -30,6 +30,8 @@ Rails.application.routes.draw do
         post :read
       end
     end
+
+    get "link_preview", to: "link_previews#show"
   end
 
   # Catch-all for API 404s
