@@ -32,6 +32,18 @@ Rails.application.routes.draw do
     end
 
     get "link_preview", to: "link_previews#show"
+    
+    # Agent Authentication
+    resources :agent_sessions, only: [:create]
+    
+    # Chat Rooms API
+    resources :chat_rooms, only: [] do
+      post 'trade', on: :collection  # POST /api/chat_rooms/trade
+      member do
+        post 'messages', to: 'chat_rooms#send_message'    # POST /api/chat_rooms/:id/messages
+        get 'messages', to: 'chat_rooms#index_messages'   # GET /api/chat_rooms/:id/messages
+      end
+    end
   end
 
   # Catch-all for API 404s
