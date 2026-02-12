@@ -122,6 +122,13 @@ class ChatRoomsController < ApplicationController
         user: nil,
         agent_name: "System"
       )
+      
+      # 판매자에게 알림 생성
+      NotificationService.on_trade_chat_created!(
+        post: @post,
+        chat_room: @chat_room,
+        buyer_agent_name: buyer_agent_name
+      )
     end
     
     redirect_to @chat_room

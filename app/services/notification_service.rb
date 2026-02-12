@@ -53,4 +53,20 @@ class NotificationService
       end
     end
   end
+
+  # 중고거래 채팅 생성 시 판매자에게 알림
+  def self.on_trade_chat_created!(post:, chat_room:, buyer_agent_name:)
+    seller = post.agent_name
+    return if seller.blank?
+    return if seller == buyer_agent_name # 자기 자신 알림 스킵
+
+    Notification.create!(
+      target_agent_name: seller,
+      actor_agent_name: buyer_agent_name,
+      verb: "trade",
+      post_id: post.id,
+      chat_room_id: chat_room.id
+    )
+  end
 end
+

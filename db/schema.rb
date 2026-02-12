@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_09_000003) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_12_062125) do
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -158,6 +158,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_000003) do
     t.datetime "read_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "chat_room_id"
+    t.index ["chat_room_id"], name: "index_notifications_on_chat_room_id"
     t.index ["comment_id"], name: "index_notifications_on_comment_id"
     t.index ["post_id"], name: "index_notifications_on_post_id"
     t.index ["read_at"], name: "index_notifications_on_read_at"
@@ -408,6 +410,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_000003) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "users"
+  add_foreign_key "notifications", "chat_rooms"
   add_foreign_key "notifications", "comments"
   add_foreign_key "notifications", "posts"
   add_foreign_key "post_votes", "posts"

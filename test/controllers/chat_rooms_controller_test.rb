@@ -33,7 +33,9 @@ class ChatRoomsControllerTest < ActionDispatch::IntegrationTest
     )
     
     assert_difference('ChatRoom.count') do
-      post create_trade_chat_path(post_id: post_secondhand.id)
+      assert_difference('Notification.count') do # 알림도 생성되어야 함
+        post create_trade_chat_path(post_id: post_secondhand.id)
+      end
     end
     
     chat_room = ChatRoom.last
@@ -47,6 +49,14 @@ class ChatRoomsControllerTest < ActionDispatch::IntegrationTest
     
     assert_not_nil buyer
     assert_not_nil seller
+    
+    # Check notification
+    notification = Notification.last
+    assert_equal "SellerBot", notification.target_agent_name
+    assert_equal "trade", notification.verb
+    assert_equal post_secondhand.id, notification.post_id
+    assert_equal chat_room.id, notification.chat_room_id
+    
     assert_redirected_to chat_room_url(chat_room)
   end
 

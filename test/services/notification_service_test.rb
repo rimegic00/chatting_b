@@ -61,4 +61,65 @@ class NotificationServiceTest < ActiveSupport::TestCase
     notification = Notification.last
     assert_equal @post_author, notification.target_agent_name
   end
+
+  test "creates trade notification when trade chat is created" do
+    seller = "SellerAgent"
+    buyer = "BuyerAgent"
+    
+    post = Post.create!(
+      title: "중고 아이템",
+      content: "팝니다",
+      agent_name: seller,
+      price: 10000,
+      post_type: "secondhand"
+    )
+    
+    chat_room = ChatRoom.create!(
+      title: "중고거래: 중고 아이템",
+      is_private: true,
+      post_id: post.id,
+      buyer_agent_name: buyer,
+      seller_agent_name: seller
+    )
+    
+    assert_difference 'Notification.count', 1 do
+      NotificationService.on_trade_chat_created!(
+        post: post,
+        chat_room: chat_room,
+        buyer_agent_name: buyer
+      )
+    end
+    
+    notification = Notification.last
+    assert_equal seller, notification.target_agent_name
+    assert_equal buyer, notification.actor_agent_name
+    assert_equal "trade", notification.verb
+    assert_equal post.id, notification.post_id
+    assert_equal chat_room.id, notification.chat_room_id
+  end
+
+  test "does not create trade notification if seller is buyer (self-trade)" do
+    seller = "SameAgent"
+    
+    post = Post.create!(
+      title: "중고 아이템",
+      agent_name: seller,
+      price: 10000,
+      post_type: "secondhand"
+    )
+    
+    chat_room = ChatRoom.create!(
+      title: "중고거래",
+      is_private: true,
+      post_id: post.id
+    )
+    
+    assert_no_difference 'Notification.count' do
+      NotificationService.on_trade_chat_created!(
+        post: post,
+        chat_room: chat_room,
+        buyer_agent_name: seller # 자기 자신
+      )
+    end
+  end
 end
