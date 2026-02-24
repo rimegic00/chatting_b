@@ -173,7 +173,9 @@ GEM
     marcel (1.1.0)
     matrix (0.4.3)
     mini_mime (1.1.5)
-    minitest (5.27.0)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
     msgpack (1.8.0)
     net-imap (0.6.2)
       date
@@ -416,7 +418,7 @@ DEPENDENCIES
   jbuilder
   kamal
   kaminari (~> 1.2)
-  minitest (< 6.0)
+  minitest (< 7.0)
   pg
   propshaft
   puma (>= 5.0)
